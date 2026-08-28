@@ -73,8 +73,8 @@ button { color: inherit; font: inherit; }
 .section-label { align-items: center; border-bottom: 1px solid var(--ink); display: flex; font-size: .84rem; font-weight: 800; gap: .9rem; letter-spacing: .08em; padding: 1.15rem 0; text-transform: uppercase; }
 .section-label span { color: var(--red); }
 .about-grid { display: grid; gap: clamp(3rem, 8vw, 10rem); grid-template-columns: 1.5fr 1fr; padding-top: clamp(4rem, 8vw, 8rem); }
-.display-title { font-size: clamp(3.3rem, 6.35vw, 7.7rem); }
-.display-title span { color: transparent; -webkit-text-stroke: 1.5px var(--ink); }
+.display-title { font-size: clamp(3.3rem, 6.35vw, 7.7rem); letter-spacing: -.035em; line-height: .96; }
+.display-title span { color: transparent; display: inline-block; letter-spacing: .015em; line-height: 1.02; padding-right: .025em; -webkit-text-stroke: 1px var(--ink); word-spacing: .035em; }
 .idea-intro, .method-heading, .studio-heading, .projects-heading { align-items: end; display: grid; gap: clamp(3rem, 8vw, 10rem); grid-template-columns: 1.55fr 1fr; padding: clamp(4rem, 8vw, 8rem) 0 clamp(3rem, 6vw, 6rem); }
 .idea-copy p, .method-heading p, .studio-heading p, .projects-heading p { font-size: clamp(1rem, 1.45vw, 1.3rem); line-height: 1.45; margin: 0; max-width: 34rem; }
 .idea-copy .lead { font-size: clamp(1.45rem, 2.25vw, 2.15rem); font-weight: 750; letter-spacing: -.04em; line-height: 1.08; margin-bottom: 1.4rem; }
@@ -217,12 +217,13 @@ button { color: inherit; font: inherit; }
 .person-focus { color: var(--muted); font-size: .9rem; }
 .person-email { bottom: 1rem; font-size: .78rem; font-weight: 800; position: absolute; right: 1rem; text-transform: uppercase; }
 .person-profile-links { display: inline-flex; flex: none; gap: .3rem; }
-.person-profile-link { align-items: center; border: 1px solid currentColor; color: var(--ink); display: inline-flex; height: 1.85rem; justify-content: center; transition: background-color .2s, border-color .2s, color .2s; width: 1.85rem; }
-.person-profile-link svg { display: block; height: 1rem; width: 1rem; }
-.profile-icon-ecnu { display: block; height: 1rem; overflow: hidden; position: relative; width: 1rem; }
-.profile-icon-ecnu img { filter: invert(1); height: 1rem; max-width: none; position: absolute; transition: filter .2s; width: auto; }
-.person-profile-link:hover, .person-profile-link:focus-visible { background: var(--red); border-color: var(--red); color: var(--white); }
-.person-profile-link-ecnu:hover img, .person-profile-link-ecnu:focus-visible img { filter: none; }
+.person-profile-link { align-items: center; border: 0; color: var(--ink); display: inline-flex; height: 1.75rem; justify-content: center; transition: color .2s, transform .2s; width: 1.75rem; }
+.person-profile-link svg { display: block; height: 1.08rem; width: 1.08rem; }
+.profile-icon-ecnu { display: block; height: 1.08rem; overflow: hidden; position: relative; width: 1.08rem; }
+.profile-icon-ecnu img { filter: invert(1); height: 1.08rem; max-width: none; position: absolute; transition: filter .2s; width: auto; }
+.person-profile-link:hover, .person-profile-link:focus-visible { color: var(--red); transform: translateY(-1px); }
+.person-profile-link:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+.person-profile-link-ecnu:hover img, .person-profile-link-ecnu:focus-visible img { filter: brightness(0) saturate(100%) invert(36%) sepia(92%) saturate(2570%) hue-rotate(345deg) brightness(99%) contrast(92%); }
 
 .life { background: #1d2748; color: var(--white); padding-bottom: clamp(5rem, 8vw, 8rem); }
 .section-label-light { border-color: rgba(255,255,255,.5); }
@@ -338,8 +339,8 @@ button { color: inherit; font: inherit; }
   .brand-mark { grid-template-columns: repeat(3, 13px); grid-template-rows: repeat(3, 13px); gap: 4px; }
   .brand-name { font-size: 1.15rem; }
   .menu-toggle { padding: 0 1rem; }
-  .display-title { font-size: clamp(2.65rem, 12.5vw, 3.6rem); letter-spacing: -.035em; line-height: .96; max-width: 100%; overflow-wrap: anywhere; word-spacing: .035em; }
-  .display-title span { -webkit-text-stroke-width: 1px; }
+  .display-title { font-size: clamp(2.65rem, 12.5vw, 3.6rem); letter-spacing: -.015em; line-height: 1; max-width: 100%; overflow-wrap: anywhere; }
+  .display-title span { letter-spacing: .03em; line-height: 1.06; overflow-wrap: normal; -webkit-text-stroke-width: 1px; word-break: normal; word-spacing: .055em; }
   .studio-heading .display-title { font-size: clamp(2.55rem, 11.8vw, 3.4rem); }
   .idea-visual figcaption { font-size: 1rem; }
   .section-intro, .work-heading, .people-heading, .life-intro { gap: 1.5rem; padding-top: 3.5rem; }
