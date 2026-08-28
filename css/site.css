@@ -63,10 +63,11 @@ button { color: inherit; font: inherit; }
 .hero-visual-caption { font-size: clamp(.78rem, 1vw, .95rem); line-height: 1.35; margin: 1rem 0 0; max-width: 27rem; }
 
 .marquee { background: var(--red); color: var(--white); overflow: hidden; padding: .85rem 0; }
-.marquee-track { align-items: center; animation: ticker 28s linear infinite; display: flex; gap: 2rem; width: max-content; }
+.marquee-track { animation: ticker 28s linear infinite; display: flex; width: max-content; }
+.marquee-group { align-items: center; display: flex; flex: none; gap: 2rem; padding-right: 2rem; }
 .marquee span { font-size: .75rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
-.marquee i { background: var(--white); display: block; height: 7px; transform: rotate(45deg); width: 7px; }
-@keyframes ticker { to { transform: translateX(-50%); } }
+.marquee i { background: var(--white); display: block; flex: none; height: 7px; transform: rotate(45deg); width: 7px; }
+@keyframes ticker { to { transform: translateX(calc(-100% / 6)); } }
 
 .section { border-bottom: 1px solid var(--ink); padding: 0 var(--pad) clamp(5rem, 10vw, 10rem); }
 .section-label { align-items: center; border-bottom: 1px solid var(--ink); display: flex; font-size: .84rem; font-weight: 800; gap: .9rem; letter-spacing: .08em; padding: 1.15rem 0; text-transform: uppercase; }
@@ -329,7 +330,9 @@ button { color: inherit; font: inherit; }
   .brand-mark { grid-template-columns: repeat(3, 13px); grid-template-rows: repeat(3, 13px); gap: 4px; }
   .brand-name { font-size: 1.15rem; }
   .menu-toggle { padding: 0 1rem; }
-  .display-title { font-size: clamp(2.8rem, 14vw, 4rem); overflow-wrap: anywhere; }
+  .display-title { font-size: clamp(2.65rem, 12.5vw, 3.6rem); letter-spacing: -.035em; line-height: .96; max-width: 100%; overflow-wrap: anywhere; word-spacing: .035em; }
+  .display-title span { -webkit-text-stroke-width: 1px; }
+  .studio-heading .display-title { font-size: clamp(2.55rem, 11.8vw, 3.4rem); }
   .idea-visual figcaption { font-size: 1rem; }
   .section-intro, .work-heading, .people-heading, .life-intro { gap: 1.5rem; padding-top: 3.5rem; }
   .life-intro h2, .metrics h2 { font-size: clamp(3.1rem, 15vw, 4.5rem); }
