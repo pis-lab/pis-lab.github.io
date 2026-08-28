@@ -1,4 +1,8 @@
 node_modules/
 dist/
+.next/
+.vinext/
+.wrangler/
+next-env.d.ts
 .DS_Store
 *.log
