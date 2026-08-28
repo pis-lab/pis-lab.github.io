@@ -1,65 +1,87 @@
 # PIS Lab 网页内容更新指南
 
-这个网站已经把经常变化的内容和页面设计分开。发布项目或更新成员时，不需要修改 `index.html`、CSS 或 JavaScript。
+网站的内容数据已经与页面设计分开。学生更新 **Working Systems** 或 **People** 时，不需要修改 `index.html`、CSS 或 JavaScript。
 
-## 最快的更新方式：直接使用 GitHub 网页
+## 推荐方式：PIS Content Studio
 
-1. 登录 GitHub，打开 PIS Lab 网站仓库。
-2. 新图片先上传到对应目录：
-   - 研究项目图片：`img/projects/`
-   - 成员照片：`img/member/`
-3. 更新研究项目时编辑 `content/projects.json`；更新成员时编辑 `content/people.json`。
-4. 复制一个现有的完整 `{ ... }` 条目，粘贴到数组中，再替换文字、链接和图片路径。每个条目之间必须保留英文逗号。
-5. 使用 GitHub 的 **Preview changes** 检查变更，提交到新分支并发起 Pull Request。合并到 `main` 后，GitHub Pages 会按仓库的发布设置更新网站。
+这是一个只在本机运行的内容更新工作台。它会把表单内容写入 JSON，自动裁图、压缩并生成 WebP 文件，但不会直接发布网站，也不会自动合并代码。
 
-建议由一位同学审核 Pull Request。这样即使格式写错，也不会直接影响线上主页。
+### 第一次使用
 
-## 研究项目条目模板
-
-```json
-{
-  "name": "Project name",
-  "category": "Research category",
-  "headline": "One clear claim about the project.",
-  "description": "What the system does, why it matters, and what evidence or prototype exists.",
-  "image": "img/projects/project-name.webp",
-  "alt": "A factual description of the project image",
-  "stage": "In development",
-  "tags": ["Method", "Application", "Outcome"]
-}
-```
-
-只保留能被项目、原型或图片支撑的描述。图片应与当前项目直接对应；不要为了填满页面沿用无关旧图或宽泛口号。
-
-## 成员条目模板
-
-```json
-{
-  "role": "Research assistant",
-  "name": "Student Name",
-  "focus": "Research topic",
-  "image": "img/member/student-name.jpg",
-  "alt": "Student Name",
-  "email": "name@example.com"
-}
-```
-
-`email` 可以省略。仅负责人使用 `"lead": true`。
-
-## 图片建议
-
-- 项目图片：横图优先，建议约 3:2；风格可以统一，但图中对象和研究机制必须准确。
-- 成员照片：竖图或方图，建议至少 800 × 1000 px。
-- 文件名使用小写英文、数字和连字符，不要使用空格。
-- 上传前压缩图片；单张尽量不超过 1 MB。
-- `alt` 应描述图片内容，不能只写 “image”。
-
-## 本地检查（维护者）
+1. 从实验室网站仓库拉取最新版代码。
+2. 在项目文件夹打开终端，运行：
 
 ```bash
 npm install
-npm run validate:content
-npm run dev
+npm run content:studio
 ```
 
-`npm run validate:content` 会检查必填字段、重复条目、链接格式和图片是否存在。`npm run build` 也会自动执行同样的检查，并自动把静态资源同步到发布目录。
+3. 浏览器打开 `http://127.0.0.1:4174/`。终端需要保持打开。
+
+### 每次添加内容
+
+1. 在工作台选择 **Working System** 或 **People**。
+2. 填写表单并上传图片，右侧会显示近似预览。
+3. 点击“生成并写入网站内容”。
+4. 另开一个终端，运行 `npm run dev`，打开本地主页检查实际效果。
+5. 使用 GitHub Desktop 查看改动，创建分支并提交 Pull Request。由负责人审核后再合并发布。
+
+工具不会要求学生填写 Working System 编号。网页会按照 `content/projects.json` 中的顺序自动显示 `01`、`02`、`03`……；新增第 6 项时会自动显示为 `06`。
+
+## Working System 需要提供什么
+
+| 字段 | 录入方式 | 要求 |
+| --- | --- | --- |
+| 项目图片 | 上传 | 必填；自动居中裁成 3:2、压缩为 WebP |
+| 项目名称 | 自由填写 | 必填；显示在卡片底部 |
+| 类型 / 阶段 | 预置选择或自定义 | 必填；例如 Prototype、Method、In development |
+| 红色属性标题 | 预置建议或自定义 | 必填；例如 Embodied AI、Tangible Informatics |
+| 加粗大标题 | 自由填写 | 必填；一句话说明核心价值 |
+| 正文描述 | 自由填写 | 必填；一段话说明做什么、为什么重要 |
+| Category / keywords | 自由填写 | 必填；逗号分隔，1–8 个 |
+| 图片说明 | 自由填写 | 必填；客观描述画面，供无障碍访问使用 |
+| 英文文件名 | 自由填写 | 可选；留空会根据项目名自动生成 |
+
+只写能被项目、原型或图片支撑的内容。图片必须与当前项目直接对应，不沿用无关旧图。
+
+## 新成员需要提供什么
+
+| 字段 | 录入方式 | 要求 |
+| --- | --- | --- |
+| 成员照片 | 上传 | 必填；自动裁成方形、压缩为 WebP |
+| 姓名 | 自由填写 | 必填 |
+| 身份 / Role | 预置建议或自定义 | 必填；例如 PhD student、Research assistant |
+| 研究方向 / Focus | 自由填写 | 必填；保持简洁 |
+| Email | 自由填写 | 可选 |
+| 照片焦点 | 三项选择 | 居中、靠上、面部略靠上；用于处理不同构图的照片 |
+| 照片说明 | 自由填写 | 可选；留空默认使用姓名 |
+| 英文文件名 | 自由填写 | 可选；留空自动生成 |
+
+负责人标记 `"lead": true` 不开放给普通录入者，避免误把新成员显示为实验室负责人。
+
+## People 的自动排版
+
+- 桌面端固定 4 列，8 人为 4 + 4。
+- 第 9 人加入后仍保持 4 列，最后一张卡片自动居中，不会把全页拉成较空的 3 × 3。
+- 10 人时最后两张卡片自动居中。
+- 平板与手机自动切换为 3 列、2 列和 1 列，不需要学生设置。
+
+## 安全与审核
+
+PIS Content Studio 只监听本机地址 `127.0.0.1`，不会部署到公开主页，也不保存发布密钥。它负责“生成规范内容”，GitHub Pull Request 负责“审核与批准上线”。这样学生能快速录入，同时不会因为误操作直接改坏正式网站。
+
+## 备用方式：直接编辑 JSON
+
+如果工作台暂时不能运行，也可以上传图片后直接编辑：
+
+- 研究项目：`content/projects.json` 与 `img/projects/`
+- 成员：`content/people.json` 与 `img/member/`
+
+提交前运行：
+
+```bash
+npm run validate:content
+npm run build
+```
+
+这两个命令会检查必填字段、重复条目、邮件格式、照片焦点和图片是否存在。

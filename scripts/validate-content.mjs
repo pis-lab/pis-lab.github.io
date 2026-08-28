@@ -63,6 +63,7 @@ for (const [index, person] of people.entries()) {
   if (peopleNames.has(person.name)) throw new Error(`${label}: duplicate name “${person.name}”.`);
   peopleNames.add(person.name);
   if (person.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(person.email)) throw new Error(`${label}: invalid email.`);
+  if (person.position && !['center', 'top', 'center 35%'].includes(person.position)) throw new Error(`${label}: unsupported photo position.`);
   await requireLocalImage(person.image, label);
 }
 

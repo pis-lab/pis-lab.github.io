@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PIS Lab Content Studio</title>
+  <style>
+    :root { --red:#f2442e; --ink:#11110f; --paper:#f3f2ee; --white:#fff; --muted:#6d6b66; }
+    * { box-sizing:border-box; }
+    body { background:var(--paper); color:var(--ink); font-family:"Helvetica Neue",Arial,sans-serif; margin:0; }
+    button,input,select,textarea { color:inherit; font:inherit; }
+    button { cursor:pointer; }
+    header { align-items:end; border-bottom:1px solid var(--ink); display:grid; gap:2rem; grid-template-columns:1fr auto; padding:2rem clamp(1rem,4vw,4rem); }
+    header p { margin:.5rem 0 0; max-width:45rem; }
+    h1 { font-size:clamp(2.8rem,7vw,7rem); letter-spacing:-.065em; line-height:.82; margin:0; text-transform:uppercase; }
+    h1 span { color:var(--red); font-family:Georgia,serif; font-style:italic; font-weight:400; text-transform:none; }
+    .counts { display:flex; gap:1rem; }
+    .count { border-left:1px solid var(--ink); min-width:7rem; padding-left:1rem; }
+    .count b { display:block; font-size:2.4rem; line-height:1; }
+    .count span,.eyebrow { color:var(--red); font-size:.7rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    main { display:grid; grid-template-columns:minmax(18rem,.8fr) minmax(0,1.35fr) minmax(18rem,.85fr); min-height:calc(100vh - 13rem); }
+    .sidebar,.form-column,.preview-column { padding:clamp(1.25rem,3vw,3rem); }
+    .sidebar,.form-column { border-right:1px solid var(--ink); }
+    .tabs { display:grid; grid-template-columns:1fr 1fr; margin:2rem 0; }
+    .tab { background:transparent; border:1px solid var(--ink); font-size:.75rem; font-weight:800; letter-spacing:.06em; padding:1rem; text-transform:uppercase; }
+    .tab + .tab { border-left:0; }
+    .tab.active { background:var(--ink); color:var(--white); }
+    .sidebar h2 { font-size:clamp(1.8rem,3vw,3.2rem); letter-spacing:-.05em; line-height:.95; margin:1rem 0; text-transform:uppercase; }
+    .sidebar ol { border-top:1px solid var(--ink); line-height:1.45; margin:2rem 0 0; padding:1rem 0 0 1.25rem; }
+    .sidebar li { margin-bottom:.8rem; }
+    .note { background:#dfe3ed; font-size:.82rem; line-height:1.45; margin-top:2rem; padding:1rem; }
+    form { display:grid; gap:1.1rem; }
+    .form-section { display:grid; gap:1.1rem; }
+    .form-section[hidden] { display:none; }
+    .field { display:grid; gap:.45rem; }
+    .field-row { display:grid; gap:1rem; grid-template-columns:1fr 1fr; }
+    label { font-size:.72rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; }
+    label small { color:var(--muted); font-size:.68rem; font-weight:500; letter-spacing:0; text-transform:none; }
+    input,select,textarea { background:var(--white); border:1px solid var(--ink); border-radius:0; min-width:0; padding:.8rem; width:100%; }
+    textarea { min-height:7rem; resize:vertical; }
+    input[type=file] { background:transparent; padding:.7rem 0; }
+    .custom-field[hidden] { display:none; }
+    .submit { background:var(--red); border:1px solid var(--red); color:var(--white); font-size:.8rem; font-weight:850; letter-spacing:.08em; margin-top:1rem; padding:1rem; text-transform:uppercase; }
+    .submit:disabled { cursor:wait; opacity:.55; }
+    .result { border-top:1px solid var(--ink); font-size:.88rem; line-height:1.45; margin-top:1.5rem; padding-top:1rem; }
+    .result.error { color:#a41f14; }
+    .preview-column { background:#dfe3ed; }
+    .preview-column h2 { font-size:.75rem; letter-spacing:.08em; margin:0 0 1rem; text-transform:uppercase; }
+    .project-preview { background:var(--ink); color:var(--white); }
+    .project-preview img { aspect-ratio:3/2; background:#2c2c29; display:block; object-fit:cover; width:100%; }
+    .project-preview-body { min-height:22rem; padding:1.25rem; }
+    .project-meta { display:flex; justify-content:space-between; }
+    .project-meta b,.project-category { color:var(--red); font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; }
+    .project-meta span { color:#aaa; font-size:.7rem; text-transform:uppercase; }
+    .project-category { margin:5rem 0 .7rem; }
+    .project-preview h3 { font-size:clamp(2rem,4vw,4rem); letter-spacing:-.06em; line-height:.9; margin:0 0 1rem; text-transform:uppercase; }
+    .project-preview p { color:#bbb; font-size:.9rem; line-height:1.45; }
+    .project-preview ul { border-top:1px solid #666; display:flex; flex-wrap:wrap; gap:.5rem; list-style:none; padding:1rem 0 0; }
+    .project-preview li { font-size:.68rem; text-transform:uppercase; }
+    .project-preview strong { display:block; margin-top:1rem; text-transform:uppercase; }
+    .person-preview { background:var(--paper); border:1px solid var(--ink); }
+    .person-preview img { aspect-ratio:1; background:#ccc; display:block; object-fit:cover; width:100%; }
+    .person-preview-body { min-height:12rem; padding:1rem; }
+    .person-preview .role { color:var(--red); font-size:.72rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    .person-preview h3 { font-size:2rem; letter-spacing:-.05em; margin:2rem 0 .5rem; text-transform:uppercase; }
+    .person-preview .focus { color:var(--muted); }
+    .empty-image { align-items:center; color:#777; display:flex!important; justify-content:center; }
+    @media (max-width:1050px) { main { grid-template-columns:1fr 1.35fr; } .preview-column { grid-column:1/-1; } }
+    @media (max-width:700px) { header,main { display:block; } .counts { margin-top:2rem; } .sidebar,.form-column { border-bottom:1px solid var(--ink); border-right:0; } .field-row { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div><h1>PIS Content<br><span>Studio.</span></h1><p>通过表单更新 Working Systems 与 People。工具只在本机运行，提交后直接生成网站所需的 JSON 和优化图片。</p></div>
+    <div class="counts"><div class="count"><b data-project-count>—</b><span>Working systems</span></div><div class="count"><b data-people-count>—</b><span>People</span></div></div>
+  </header>
+
+  <main>
+    <aside class="sidebar">
+      <span class="eyebrow">Local editorial tool</span>
+      <h2>选择要更新的内容</h2>
+      <div class="tabs"><button class="tab active" type="button" data-kind="project">Working System</button><button class="tab" type="button" data-kind="person">People</button></div>
+      <ol>
+        <li>选择或填写属性，上传对应图片。</li>
+        <li>右侧实时检查大致呈现效果。</li>
+        <li>点击生成，工具自动处理图片并写入内容文件。</li>
+        <li>运行网站预览；确认后通过 GitHub Desktop 提交 Pull Request。</li>
+      </ol>
+      <div class="note"><b>安全边界</b><br>工具不会直接发布网站，也不会自动合并内容。负责人审核并合并后才进入正式主页。</div>
+    </aside>
+
+    <section class="form-column">
+      <form data-form>
+        <section class="form-section" data-project-fields>
+          <div class="field"><label>项目图片 <small>必填；自动裁成 3:2 WebP</small></label><input type="file" accept="image/png,image/jpeg,image/webp" required data-project-image></div>
+          <div class="field-row">
+            <div class="field"><label>项目名称 <small>卡片底部名称</small></label><input name="projectName" required maxlength="120" placeholder="e.g. Embodied AI"></div>
+            <div class="field"><label>类型 / 阶段 <small>可选择或自定义</small></label><select name="projectStage" data-stage-select></select><input class="custom-field" name="projectStageCustom" hidden placeholder="输入自定义类型"></div>
+          </div>
+          <div class="field"><label>红色属性标题</label><input name="projectCategory" list="project-category-options" required maxlength="80" placeholder="选择现有属性或直接输入"><datalist id="project-category-options"></datalist></div>
+          <div class="field"><label>加粗大标题</label><textarea name="projectHeadline" required maxlength="180" placeholder="用一句话说清项目的核心价值"></textarea></div>
+          <div class="field"><label>正文描述 <small>一段话，说明做什么、为什么重要</small></label><textarea name="projectDescription" required maxlength="800"></textarea></div>
+          <div class="field"><label>Category / keywords <small>使用逗号分隔，1–8 个</small></label><input name="projectTags" required placeholder="Embodied AI, World models, Shared autonomy"></div>
+          <div class="field"><label>图片说明 <small>描述画面本身，用于无障碍访问</small></label><input name="projectAlt" required maxlength="180"></div>
+          <div class="field"><label>英文文件名 <small>可选；留空则根据项目名自动生成</small></label><input name="projectSlug" maxlength="64" placeholder="embodied-ai"></div>
+        </section>
+
+        <section class="form-section" data-person-fields hidden>
+          <div class="field"><label>成员照片 <small>必填；自动裁成方形 WebP</small></label><input type="file" accept="image/png,image/jpeg,image/webp" data-person-image></div>
+          <div class="field-row">
+            <div class="field"><label>姓名</label><input name="personName" maxlength="100"></div>
+            <div class="field"><label>身份 / Role <small>可选择或直接输入</small></label><input name="personRole" list="people-role-options" maxlength="80"><datalist id="people-role-options"></datalist></div>
+          </div>
+          <div class="field"><label>研究方向 / Focus</label><input name="personFocus" maxlength="180" placeholder="Tangible Informatics / Human Factors"></div>
+          <div class="field-row">
+            <div class="field"><label>Email <small>可选</small></label><input name="personEmail" type="email" maxlength="160"></div>
+            <div class="field"><label>照片焦点</label><select name="personPosition"><option value="center">居中</option><option value="top">靠上</option><option value="center 35%">面部略靠上</option></select></div>
+          </div>
+          <div class="field"><label>照片说明 <small>可留空，默认使用姓名</small></label><input name="personAlt" maxlength="180"></div>
+          <div class="field"><label>英文文件名 <small>可选</small></label><input name="personSlug" maxlength="64" placeholder="student-name"></div>
+        </section>
+
+        <button class="submit" type="submit">生成并写入网站内容</button>
+      </form>
+      <div class="result" data-result>尚未提交。工具会先验证必填项、重复姓名和图片格式。</div>
+    </section>
+
+    <aside class="preview-column">
+      <h2>Approximate page preview</h2>
+      <article class="project-preview" data-project-preview>
+        <div class="empty-image" data-project-image-preview>选择项目图片</div>
+        <div class="project-preview-body"><div class="project-meta"><b data-preview-number>—</b><span data-preview-stage>Type / stage</span></div><div class="project-category" data-preview-category>Red category title</div><h3 data-preview-headline>Large project headline</h3><p data-preview-description>正文描述会显示在这里。</p><ul data-preview-tags><li>Keyword</li></ul><strong data-preview-name>Project name</strong></div>
+      </article>
+      <article class="person-preview" data-person-preview hidden>
+        <div class="empty-image" data-person-image-preview>选择成员照片</div>
+        <div class="person-preview-body"><div class="role" data-preview-role>Role</div><h3 data-preview-person-name>Member name</h3><div class="focus" data-preview-focus>Research focus</div></div>
+      </article>
+    </aside>
+  </main>
+
+  <script>
+    const $ = (selector) => document.querySelector(selector);
+    let state = null;
+    let kind = 'project';
+    let projectFile = null;
+    let personFile = null;
+
+    function option(value, label = value) { const item = document.createElement('option'); item.value = value; item.textContent = label; return item; }
+
+    async function loadState() {
+      const response = await fetch('/api/state');
+      state = await response.json();
+      $('[data-project-count]').textContent = state.projects;
+      $('[data-people-count]').textContent = state.people;
+      $('[data-preview-number]').textContent = String(state.nextProject).padStart(2, '0');
+      const stage = $('[data-stage-select]');
+      stage.replaceChildren(...state.presets.projectStages.map((item) => option(item)), option('__custom__', '自定义…'));
+      $('#project-category-options').replaceChildren(...state.presets.projectCategories.map((item) => option(item)));
+      $('#people-role-options').replaceChildren(...state.presets.peopleRoles.map((item) => option(item)));
+    }
+
+    function setKind(nextKind) {
+      kind = nextKind;
+      document.querySelectorAll('.tab').forEach((tab) => tab.classList.toggle('active', tab.dataset.kind === kind));
+      $('[data-project-fields]').hidden = kind !== 'project';
+      $('[data-person-fields]').hidden = kind !== 'person';
+      $('[data-project-preview]').hidden = kind !== 'project';
+      $('[data-person-preview]').hidden = kind !== 'person';
+      $('[data-project-image]').required = kind === 'project';
+      $('[data-person-image]').required = kind === 'person';
+      const requiredProjectFields = new Set(['projectName', 'projectCategory', 'projectHeadline', 'projectDescription', 'projectTags', 'projectAlt']);
+      document.querySelectorAll('[data-project-fields] input, [data-project-fields] textarea').forEach((input) => {
+        input.required = kind === 'project' && requiredProjectFields.has(input.name);
+      });
+      document.querySelectorAll('[data-person-fields] input').forEach((input) => { if (input.type !== 'email') input.required = kind === 'person' && ['personName','personRole','personFocus'].includes(input.name); });
+      const customStage = $('[name=projectStageCustom]');
+      customStage.required = kind === 'project' && $('[data-stage-select]').value === '__custom__';
+    }
+
+    function setText(selector, value, fallback) { $(selector).textContent = value.trim() || fallback; }
+
+    function updatePreview() {
+      const form = $('[data-form]');
+      const stage = form.projectStage.value === '__custom__' ? form.projectStageCustom.value : form.projectStage.value;
+      setText('[data-preview-stage]', stage, 'Type / stage');
+      setText('[data-preview-category]', form.projectCategory.value, 'Red category title');
+      setText('[data-preview-headline]', form.projectHeadline.value, 'Large project headline');
+      setText('[data-preview-description]', form.projectDescription.value, '正文描述会显示在这里。');
+      setText('[data-preview-name]', form.projectName.value, 'Project name');
+      const tags = form.projectTags.value.split(/[,，]/).map((item) => item.trim()).filter(Boolean);
+      $('[data-preview-tags]').replaceChildren(...(tags.length ? tags : ['Keyword']).map((tag) => { const li=document.createElement('li'); li.textContent=tag; return li; }));
+      setText('[data-preview-role]', form.personRole.value, 'Role');
+      setText('[data-preview-person-name]', form.personName.value, 'Member name');
+      setText('[data-preview-focus]', form.personFocus.value, 'Research focus');
+      const personPreview = $('[data-person-image-preview]');
+      if (personPreview.tagName === 'IMG') personPreview.style.objectPosition = form.personPosition.value;
+    }
+
+    function showImage(file, selector, position = 'center') {
+      const old = $(selector);
+      const image = document.createElement('img');
+      image.dataset[selector.includes('project') ? 'projectImagePreview' : 'personImagePreview'] = '';
+      image.src = URL.createObjectURL(file);
+      image.alt = '';
+      image.style.objectPosition = position;
+      old.replaceWith(image);
+    }
+
+    async function loadBitmap(file) {
+      if ('createImageBitmap' in window) return createImageBitmap(file);
+      const image = new Image();
+      image.src = URL.createObjectURL(file);
+      await image.decode();
+      return image;
+    }
+
+    async function processImage(file, targetKind, position) {
+      if (!file) throw new Error('请先选择图片。');
+      if (file.size > 12 * 1024 * 1024) throw new Error('原始图片请控制在 12 MB 以内。');
+      const source = await loadBitmap(file);
+      const targetAspect = targetKind === 'project' ? 3 / 2 : 1;
+      let cropWidth = source.width;
+      let cropHeight = cropWidth / targetAspect;
+      if (cropHeight > source.height) { cropHeight = source.height; cropWidth = cropHeight * targetAspect; }
+      const cropX = (source.width - cropWidth) / 2;
+      const availableY = source.height - cropHeight;
+      const cropY = targetKind === 'person' && position === 'top' ? 0 : targetKind === 'person' && position === 'center 35%' ? availableY * .35 : availableY / 2;
+      const maxWidth = targetKind === 'project' ? 1800 : 1200;
+      const outputWidth = Math.max(1, Math.min(maxWidth, Math.round(cropWidth)));
+      const outputHeight = Math.round(outputWidth / targetAspect);
+      const canvas = document.createElement('canvas');
+      canvas.width = outputWidth; canvas.height = outputHeight;
+      canvas.getContext('2d').drawImage(source, cropX, cropY, cropWidth, cropHeight, 0, 0, outputWidth, outputHeight);
+      const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/webp', .86));
+      if (!blob) throw new Error('浏览器无法处理这张图片。');
+      return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(blob); });
+    }
+
+    document.querySelectorAll('.tab').forEach((tab) => tab.addEventListener('click', () => setKind(tab.dataset.kind)));
+    $('[data-stage-select]').addEventListener('change', (event) => { const custom=$('[name=projectStageCustom]'); custom.hidden=event.target.value !== '__custom__'; custom.required=event.target.value === '__custom__'; updatePreview(); });
+    $('[data-project-image]').addEventListener('change', (event) => { projectFile=event.target.files[0]; if (projectFile) showImage(projectFile, '[data-project-image-preview]'); });
+    $('[data-person-image]').addEventListener('change', (event) => { personFile=event.target.files[0]; if (personFile) showImage(personFile, '[data-person-image-preview]', $('[name=personPosition]').value); });
+    $('[data-form]').addEventListener('input', updatePreview);
+    $('[data-form]').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const button = $('.submit'); const result = $('[data-result]'); const form = event.currentTarget;
+      button.disabled = true; result.className = 'result'; result.textContent = '正在处理图片并写入内容…';
+      try {
+        const imageFile = kind === 'project' ? projectFile : personFile;
+        const position = form.personPosition.value;
+        const dataUrl = await processImage(imageFile, kind, position);
+        const fields = kind === 'project' ? {
+          name:form.projectName.value, stage:form.projectStage.value === '__custom__' ? form.projectStageCustom.value : form.projectStage.value,
+          category:form.projectCategory.value, headline:form.projectHeadline.value, description:form.projectDescription.value,
+          tags:form.projectTags.value.split(/[,，]/).map((item) => item.trim()).filter(Boolean), alt:form.projectAlt.value, slug:form.projectSlug.value
+        } : {
+          name:form.personName.value, role:form.personRole.value, focus:form.personFocus.value, email:form.personEmail.value,
+          position, alt:form.personAlt.value, slug:form.personSlug.value
+        };
+        const response = await fetch('/api/submit', { method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({kind,fields,image:{dataUrl,name:imageFile.name}}) });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.error || '生成失败。');
+        result.textContent = kind === 'project' ? `已生成第 ${data.number} 个 Working System，并写入 ${data.image}。` : `已加入第 ${data.count} 位成员，并写入 ${data.image}。`;
+        await loadState();
+      } catch (error) { result.className = 'result error'; result.textContent = error.message; }
+      finally { button.disabled = false; }
+    });
+
+    loadState().then(() => { setKind('project'); updatePreview(); }).catch((error) => { $('[data-result]').className='result error'; $('[data-result]').textContent=error.message; });
+  </script>
+</body>
+</html>

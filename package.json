@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "sync": "node scripts/sync-static.mjs",
+    "content:studio": "node scripts/content-studio.mjs",
     "validate:content": "node scripts/validate-content.mjs",
     "predev": "npm run sync && npm run validate:content",
     "dev": "vinext dev --host 127.0.0.1",

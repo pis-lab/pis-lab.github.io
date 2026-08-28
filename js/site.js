@@ -66,8 +66,11 @@ function personMarkup(person) {
   const email = person.email
     ? `<a href="mailto:${escapeHTML(person.email)}">Email ↗</a>`
     : '';
+  const photoPositionClass = person.position === 'top'
+    ? ' person-photo-top'
+    : person.position === 'center 35%' ? ' person-photo-high' : '';
   return `<article class="person${person.lead ? ' person-lead' : ''} reveal">
-    <img src="${escapeHTML(person.image)}" alt="${escapeHTML(person.alt)}" loading="lazy">
+    <img class="${photoPositionClass.trim()}" src="${escapeHTML(person.image)}" alt="${escapeHTML(person.alt)}" loading="lazy">
     <div class="person-info"><p>${escapeHTML(person.role)}</p><h3>${escapeHTML(person.name)}</h3><span>${escapeHTML(person.focus)}</span>${email}</div>
   </article>`;
 }
@@ -87,7 +90,7 @@ function projectMarkup(project, index) {
   </article>`;
 }
 
-async function hydrateContent(url, selector, renderer) {
+async function hydrateContent(url, selector, renderer, afterRender) {
   const container = document.querySelector(selector);
   if (!container) return;
   try {
@@ -95,11 +98,19 @@ async function hydrateContent(url, selector, renderer) {
     if (!response.ok) throw new Error(`Content request failed: ${response.status}`);
     const items = await response.json();
     container.innerHTML = items.map(renderer).join('');
+    afterRender?.(container, items);
     observeReveals(container);
   } catch (error) {
     console.error(error);
     container.innerHTML = '<p class="content-loading content-error">Content is temporarily unavailable. Please refresh the page.</p>';
   }
+}
+
+function configurePeopleGrid(container, people) {
+  const columns = 4;
+  container.style.setProperty('--people-columns', columns);
+  container.dataset.columns = String(columns);
+  container.dataset.remainder = String(people.length % columns);
 }
 
 function setMotionState(control, playing) {
@@ -137,4 +148,4 @@ document.querySelectorAll('[data-motion-image]').forEach((control) => {
 
 observeReveals();
 hydrateContent('content/projects.json', '[data-projects]', projectMarkup);
-hydrateContent('content/people.json', '[data-people-grid]', personMarkup);
+hydrateContent('content/people.json', '[data-people-grid]', personMarkup, configurePeopleGrid);
