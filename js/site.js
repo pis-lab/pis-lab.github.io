@@ -88,6 +88,21 @@ function personMarkup(person) {
   </article>`;
 }
 
+function projectMarkup(project, index) {
+  const tags = project.tags.map((tag) => `<li>${escapeHTML(tag)}</li>`).join('');
+  return `<article class="project-feature reveal">
+    <div class="project-image"><img src="${escapeHTML(project.image)}" alt="${escapeHTML(project.alt)}" loading="lazy"></div>
+    <div class="project-copy">
+      <div class="project-top"><span>${String(index + 1).padStart(2, '0')}</span><b>${escapeHTML(project.stage)}</b></div>
+      <p class="project-category">${escapeHTML(project.category)}</p>
+      <h3>${escapeHTML(project.headline)}</h3>
+      <p>${escapeHTML(project.description)}</p>
+      <ul>${tags}</ul>
+      <strong>${escapeHTML(project.name)}</strong>
+    </div>
+  </article>`;
+}
+
 async function hydrateContent(url, selector, renderer) {
   const container = document.querySelector(selector);
   if (!container) return;
@@ -104,6 +119,7 @@ async function hydrateContent(url, selector, renderer) {
 }
 
 observeReveals();
+hydrateContent('content/projects.json', '[data-projects]', projectMarkup);
 hydrateContent('content/news.json', '[data-news-grid]', storyMarkup);
 hydrateContent('content/people.json', '[data-people-grid]', personMarkup);
 document.querySelector('[data-year]').textContent = new Date().getFullYear();

@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Psy-Kinetic",
+    "category": "Human-in-the-loop XR",
+    "headline": "A training system that senses when to push—and when to pause.",
+    "description": "A lightweight XR system combines gaze, physiology and movement to estimate individual state, adjust embodied training intensity, and keep every intervention inside a visible safety boundary.",
+    "image": "img/projects/psy-kinetic.webp",
+    "alt": "Participant wearing an XR headset in a closed-loop adaptive training system",
+    "stage": "In development",
+    "tags": ["Multimodal sensing", "Adaptive XR", "Psychological wellbeing"]
+  },
+  {
+    "name": "Growth Resume",
+    "category": "Human–AI co-creation",
+    "headline": "Turning scattered experience into a career story.",
+    "description": "Instead of polishing a document, the system uses reflective dialogue to help students surface meaningful experience, construct a coherent narrative, and turn emerging self-knowledge into the next action.",
+    "image": "img/projects/growth-resume.webp",
+    "alt": "Student and an intelligent collaborator organizing fragmented experience into a future pathway",
+    "stage": "Student-led prototype",
+    "tags": ["Narrative identity", "Conversational AI", "Career development"]
+  },
+  {
+    "name": "Cognitive Mobility",
+    "category": "Human factors + safety",
+    "headline": "Measuring the human state behind every handover.",
+    "description": "We connect gaze, physiology, behavior and task context to model workload, attention and situational awareness—then translate those states into training, interface and safety decisions.",
+    "image": "img/research/human-ergonomics.webp",
+    "alt": "Human operator with gaze, posture and workload analysis in a control environment",
+    "stage": "Research program",
+    "tags": ["Mobility", "Situation awareness", "Risk calibration"]
+  },
+  {
+    "name": "Tangible Intelligence",
+    "category": "Embodied collaboration",
+    "headline": "Making intelligent processes visible, understandable and controllable.",
+    "description": "We turn opaque sensing, reasoning and planning into shared objects and boundaries that people can inspect, question, steer and safely override across interfaces, robots and intelligent environments.",
+    "image": "img/research/embodied-intelligence.webp",
+    "alt": "Robotic system combining spatial perception, motion planning and physical action",
+    "stage": "Method + platform",
+    "tags": ["Cognitive collaboration", "Embodied AI", "Human control"]
+  }
+]

@@ -30,6 +30,19 @@ async function requireLocalImage(image, label) {
 
 const news = await readJSON('content/news.json');
 const people = await readJSON('content/people.json');
+const projects = await readJSON('content/projects.json');
+
+const projectNames = new Set();
+for (const [index, project] of projects.entries()) {
+  const label = `projects.json item ${index + 1}`;
+  requireFields(project, ['name', 'category', 'headline', 'description', 'image', 'alt', 'stage'], label);
+  if (projectNames.has(project.name)) throw new Error(`${label}: duplicate name “${project.name}”.`);
+  projectNames.add(project.name);
+  if (!Array.isArray(project.tags) || !project.tags.length || project.tags.some((tag) => typeof tag !== 'string' || !tag.trim())) {
+    throw new Error(`${label}: tags must be a non-empty array of text labels.`);
+  }
+  await requireLocalImage(project.image, label);
+}
 
 const newsTitles = new Set();
 for (const [index, story] of news.entries()) {
@@ -53,4 +66,4 @@ for (const [index, person] of people.entries()) {
   await requireLocalImage(person.image, label);
 }
 
-console.log(`Content validated: ${news.length} news items and ${people.length} people.`);
+console.log(`Content validated: ${projects.length} projects, ${news.length} news items and ${people.length} people.`);
