@@ -138,4 +138,3 @@ document.querySelectorAll('[data-motion-image]').forEach((control) => {
 observeReveals();
 hydrateContent('content/projects.json', '[data-projects]', projectMarkup);
 hydrateContent('content/people.json', '[data-people-grid]', personMarkup);
-document.querySelector('[data-year]').textContent = new Date().getFullYear();
