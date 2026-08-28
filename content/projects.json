@@ -40,13 +40,13 @@
     "tags": ["Tangible informatics", "Interaction prototyping", "Human understanding"]
   },
   {
-    "name": "VLA + World Models",
-    "category": "Embodied AI",
-    "headline": "Connecting perception, language and action in the physical world.",
-    "description": "We are exploring how vision–language–action systems and world models connect scene understanding, task intent, prediction and action in embodied agents, while keeping human oversight and system boundaries explicit.",
+    "name": "Embodied AI",
+    "category": "Human-centered physical intelligence",
+    "headline": "Understanding physical intelligence through human experience.",
+    "description": "We study embodied and physical AI as systems that enter human situations: interpreting intent, negotiating shared space and action, and keeping capability, uncertainty and control legible to people. VLA and world models connect perception, language, prediction and action around human goals.",
     "image": "img/research/embodied-intelligence.webp",
     "alt": "Robotic system combining spatial perception, scene understanding and physical action",
-    "stage": "Emerging direction",
-    "tags": ["VLA", "World models", "Embodied reasoning"]
+    "stage": "Research program",
+    "tags": ["VLA + world models", "Shared autonomy", "Human-centered embodiment"]
   }
 ]
