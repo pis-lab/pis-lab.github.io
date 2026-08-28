@@ -57,6 +57,7 @@ for (const [index, story] of news.entries()) {
 }
 
 const peopleNames = new Set();
+const profileKinds = new Set(['github', 'ecnu']);
 for (const [index, person] of people.entries()) {
   const label = `people.json item ${index + 1}`;
   requireFields(person, ['role', 'name', 'focus', 'image', 'alt'], label);
@@ -64,6 +65,18 @@ for (const [index, person] of people.entries()) {
   peopleNames.add(person.name);
   if (person.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(person.email)) throw new Error(`${label}: invalid email.`);
   if (person.position && !['center', 'top', 'center 35%'].includes(person.position)) throw new Error(`${label}: unsupported photo position.`);
+  if (person.links) {
+    if (!Array.isArray(person.links)) throw new Error(`${label}: links must be an array.`);
+    const usedKinds = new Set();
+    for (const [linkIndex, link] of person.links.entries()) {
+      const linkLabel = `${label} link ${linkIndex + 1}`;
+      requireFields(link, ['kind', 'href', 'label'], linkLabel);
+      if (!profileKinds.has(link.kind)) throw new Error(`${linkLabel}: unsupported profile kind.`);
+      if (usedKinds.has(link.kind)) throw new Error(`${linkLabel}: duplicate profile kind “${link.kind}”.`);
+      if (!link.href.startsWith('https://')) throw new Error(`${linkLabel}: href must start with https://.`);
+      usedKinds.add(link.kind);
+    }
+  }
   await requireLocalImage(person.image, label);
 }
 

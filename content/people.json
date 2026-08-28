@@ -6,6 +6,18 @@
     "image": "img/member/polysun.jfif",
     "alt": "Dr. Poly Z.H. Sun",
     "email": "poly.zhsun@outlook.com",
+    "links": [
+      {
+        "kind": "github",
+        "href": "https://polysun.github.io/",
+        "label": "Dr. Poly Z.H. Sun — GitHub"
+      },
+      {
+        "kind": "ecnu",
+        "href": "https://faculty.ecnu.edu.cn/_s9/szh2_en/main.psp",
+        "label": "Dr. Poly Z.H. Sun — ECNU faculty page"
+      }
+    ],
     "lead": true
   },
   {
