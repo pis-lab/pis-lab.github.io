@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "sync": "node scripts/sync-static.mjs",
+    "favicon": "node scripts/generate-favicon.mjs",
     "content:studio": "node scripts/content-studio.mjs",
     "validate:content": "node scripts/validate-content.mjs",
     "predev": "npm run sync && npm run validate:content",
