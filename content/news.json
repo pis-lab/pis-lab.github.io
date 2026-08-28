@@ -1,0 +1,43 @@
+[
+  {
+    "category": "Featured paper",
+    "date": "2026",
+    "datetime": "2026",
+    "title": "On cognitive collaboration",
+    "description": "A framework for connecting intent insight, cognitive evolution, autonomous planning, and embodied reconfiguration.",
+    "image": "img/blog/Cognitive_collaboration.jpg",
+    "alt": "Cognitive collaboration framework diagram",
+    "href": "https://www.sciencedirect.com/science/article/pii/S2452414X26000129",
+    "layout": "featured",
+    "imageFit": "contain"
+  },
+  {
+    "category": "Community",
+    "date": "24 Feb 2026",
+    "datetime": "2026-02-24",
+    "title": "Poly serves as an Associate Editor for IEEE T-CE",
+    "image": "img/blog/T-CE.png",
+    "alt": "IEEE Consumer Technology Society vision",
+    "href": "https://ieeexplore.ieee.org/xpl/mostRecentIssue.jsp?punumber=30"
+  },
+  {
+    "category": "Community",
+    "date": "06 Feb 2026",
+    "datetime": "2026-02-06",
+    "title": "Poly serves as an Associate Chair for CUI 2026",
+    "image": "img/blog/CUI2026.png",
+    "alt": "Conversational User Interfaces 2026 graphic",
+    "href": "https://cui.acm.org/2026/"
+  },
+  {
+    "category": "New paper · IEEE T-ASE",
+    "date": "2026",
+    "datetime": "2026",
+    "title": "LLM-enhanced intent-aware proactive decision support for industrial activities",
+    "description": "By Hongwei Jiang et al.",
+    "image": "img/blog/IAEF.png",
+    "alt": "Intent-aware execution framework",
+    "href": "https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=8856",
+    "layout": "wide"
+  }
+]

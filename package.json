@@ -4,7 +4,11 @@
   "version": "2.0.0",
   "type": "module",
   "scripts": {
+    "sync": "node scripts/sync-static.mjs",
+    "validate:content": "node scripts/validate-content.mjs",
+    "predev": "npm run sync && npm run validate:content",
     "dev": "vinext dev --host 127.0.0.1",
+    "prebuild": "npm run sync && npm run validate:content",
     "build": "vinext build",
     "start": "vinext start --host 127.0.0.1"
   },

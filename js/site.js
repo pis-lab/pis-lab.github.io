@@ -48,5 +48,62 @@ const revealObserver = new IntersectionObserver((entries, observer) => {
   });
 }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
 
-document.querySelectorAll('.reveal').forEach((item) => revealObserver.observe(item));
+function observeReveals(root = document) {
+  root.querySelectorAll('.reveal').forEach((item) => revealObserver.observe(item));
+}
+
+function escapeHTML(value = '') {
+  return String(value).replace(/[&<>'"]/g, (character) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    "'": '&#39;',
+    '"': '&quot;'
+  })[character]);
+}
+
+function storyMarkup(story) {
+  const layoutClass = story.layout === 'featured'
+    ? ' story-featured'
+    : story.layout === 'wide' ? ' story-wide' : '';
+  const imageClass = story.imageFit === 'contain' ? ' light-image' : '';
+  const meta = `<div class="story-meta"><span>${escapeHTML(story.category)}</span><time datetime="${escapeHTML(story.datetime)}">${escapeHTML(story.date)}</time></div>`;
+  const description = story.description ? `<p>${escapeHTML(story.description)}</p>` : '';
+  const words = `${meta}<h3>${escapeHTML(story.title)}</h3>${description}`;
+
+  return `<a class="story${layoutClass} reveal" href="${escapeHTML(story.href)}" target="_blank" rel="noreferrer">
+    <div class="story-image${imageClass}"><img src="${escapeHTML(story.image)}" alt="${escapeHTML(story.alt)}" loading="lazy"></div>
+    ${story.layout === 'wide' ? `<div class="story-body">${words}</div>` : words}
+    <b class="story-arrow" aria-hidden="true">↗</b>
+  </a>`;
+}
+
+function personMarkup(person) {
+  const email = person.email
+    ? `<a href="mailto:${escapeHTML(person.email)}">Email ↗</a>`
+    : '';
+  return `<article class="person${person.lead ? ' person-lead' : ''} reveal">
+    <img src="${escapeHTML(person.image)}" alt="${escapeHTML(person.alt)}" loading="lazy">
+    <div class="person-info"><p>${escapeHTML(person.role)}</p><h3>${escapeHTML(person.name)}</h3><span>${escapeHTML(person.focus)}</span>${email}</div>
+  </article>`;
+}
+
+async function hydrateContent(url, selector, renderer) {
+  const container = document.querySelector(selector);
+  if (!container) return;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Content request failed: ${response.status}`);
+    const items = await response.json();
+    container.innerHTML = items.map(renderer).join('');
+    observeReveals(container);
+  } catch (error) {
+    console.error(error);
+    container.innerHTML = '<p class="content-loading content-error">Content is temporarily unavailable. Please refresh the page.</p>';
+  }
+}
+
+observeReveals();
+hydrateContent('content/news.json', '[data-news-grid]', storyMarkup);
+hydrateContent('content/people.json', '[data-people-grid]', personMarkup);
 document.querySelector('[data-year]').textContent = new Date().getFullYear();

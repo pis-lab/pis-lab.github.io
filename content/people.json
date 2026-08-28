@@ -1,0 +1,60 @@
+[
+  {
+    "role": "Lab director",
+    "name": "Dr. Poly Z.H. Sun",
+    "focus": "Personal Informatics",
+    "image": "img/member/polysun.jfif",
+    "alt": "Dr. Poly Z.H. Sun",
+    "email": "poly.zhsun@outlook.com",
+    "lead": true
+  },
+  {
+    "role": "Lab administrator",
+    "name": "Duoduo Qu",
+    "focus": "No work, just meow meow",
+    "image": "img/member/adm.jpg",
+    "alt": "Duoduo Qu"
+  },
+  {
+    "role": "Collaborator",
+    "name": "Dr. Hanzhong Zhang",
+    "focus": "Brain–Computer Interface",
+    "image": "img/member/zhanghz.jpg",
+    "alt": "Dr. Hanzhong Zhang"
+  },
+  {
+    "role": "Collaborator",
+    "name": "Dr. Yuanzhi Liu",
+    "focus": "Embodied Robotics / SLAM",
+    "image": "img/member/Liuyz.jpg",
+    "alt": "Dr. Yuanzhi Liu"
+  },
+  {
+    "role": "Research assistant",
+    "name": "Dylan X.W. Hou",
+    "focus": "MR-based UX",
+    "image": "img/member/Xwhou.png",
+    "alt": "Dylan X.W. Hou"
+  },
+  {
+    "role": "Research assistant",
+    "name": "Sylvia X. Zhao",
+    "focus": "Human Factors in ITS / IV",
+    "image": "img/member/zx.jpg",
+    "alt": "Sylvia X. Zhao"
+  },
+  {
+    "role": "Research assistant",
+    "name": "Asher X. Cui",
+    "focus": "Embodied Robotics / Human Factors",
+    "image": "img/member/cxx.jpg",
+    "alt": "Asher X. Cui"
+  },
+  {
+    "role": "Research assistant",
+    "name": "Martin G.H. Dai",
+    "focus": "Tangible Informatics",
+    "image": "img/member/dgh.jpg",
+    "alt": "Martin G.H. Dai"
+  }
+]
