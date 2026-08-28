@@ -43,7 +43,6 @@
       <a href="#method">Method</a>
       <a href="#studio">Studio</a>
       <a href="#people">People</a>
-      <a href="#work">News</a>
       <a href="#contact">Join</a>
     </nav>
   </header>
@@ -95,6 +94,10 @@
           <p>PIS Lab studies the gap between what intelligent systems can do and what people can perceive, understand, anticipate, and control. We make that gap visible—then build ways to close it.</p>
         </div>
       </div>
+      <figure class="idea-visual reveal">
+        <img src="img/idea/cognitive-collaboration.webp" alt="Researcher examining transparent layers that externalize an intelligent system's reasoning" loading="lazy">
+        <figcaption><span>Design principle</span> Intelligence people can inspect—not merely receive.</figcaption>
+      </figure>
       <ol class="principle-grid reveal" aria-label="Four qualities of human-centered intelligence">
         <li><span>01</span><h3>Perceivable</h3><p>Critical change reaches the right person at the right moment.</p></li>
         <li><span>02</span><h3>Understandable</h3><p>Evidence, boundaries, and uncertainty form a usable mental model.</p></li>
@@ -120,6 +123,11 @@
         <h2 id="method-title" class="display-title">A loop built<br><span>around the person.</span></h2>
         <p>Every project moves between observation and intervention. The technology changes; the human-centered loop does not.</p>
       </div>
+      <div class="method-media reveal" aria-label="Three views of the research process">
+        <figure><img src="img/platforms/cave-platform.webp" alt="Researcher observed inside an immersive environment" loading="lazy"><figcaption><span>01</span> Observe in context</figcaption></figure>
+        <figure><img src="img/method/model-context.webp" alt="Layered visual model connecting human signals, context, and system response" loading="lazy"><figcaption><span>02</span> Build a working model</figcaption></figure>
+        <figure><img src="img/platforms/robot-training.webp" alt="Researcher testing embodied interaction through a live prototype" loading="lazy"><figcaption><span>03</span> Test through action</figcaption></figure>
+      </div>
       <ol class="method-steps reveal">
         <li><span>01</span><h3>Sense</h3><p>Collect gaze, physiology, behavior, language, and context.</p></li>
         <li><span>02</span><h3>Model</h3><p>Build an individual baseline and estimate changing cognitive state.</p></li>
@@ -133,12 +141,33 @@
       <div class="section-label reveal"><span>04</span> In the studio</div>
       <div class="studio-heading reveal">
         <h2 id="studio-title" class="display-title">Research happens<br><span>by building.</span></h2>
-        <p>Students work across embodied robotics, immersive environments, multimodal sensing, simulation, and fabrication—moving from a question to a prototype, and from a prototype to evidence.</p>
+        <p>Students move from a research question to a working prototype, then use live interaction to make assumptions, system behavior, and human response testable.</p>
       </div>
       <div class="studio-gallery">
-        <figure class="studio-main reveal"><img src="img/platforms/cave-platform.webp" alt="Researcher testing an immersive CAVE environment" loading="lazy"><figcaption><span>Immersive environments</span> Prototyping social, spatial, and training scenarios at human scale.</figcaption></figure>
-        <figure class="reveal"><img src="img/platforms/robot-training.webp" alt="Student testing interaction with a quadruped robot" loading="lazy"><figcaption><span>Embodied interaction</span> Learning through live human–robot trials.</figcaption></figure>
-        <div class="studio-note reveal"><p>Our platforms are not a showroom. They are places to make uncertainty testable.</p><ul><li>XR + CAVE environments</li><li>Embodied robotics</li><li>Physiological sensing</li><li>3D fabrication</li></ul></div>
+        <figure class="studio-card reveal">
+          <button class="motion-image" type="button" data-motion-image data-static="img/platforms/human-robot-handshake-poster.webp" data-animated="img/platforms/human-robot-handshake.gif" aria-pressed="false" aria-label="Play animation: human and robot handshake">
+            <img src="img/platforms/human-robot-handshake-poster.webp" alt="Human and humanoid robot completing a handshake" loading="lazy">
+          </button>
+          <figcaption><span>Human–robot interaction</span> Testing reciprocity and timing in embodied interaction.</figcaption>
+        </figure>
+        <figure class="studio-card reveal">
+          <button class="motion-image" type="button" data-motion-image data-static="img/platforms/immersive-gallery-poster.webp" data-animated="img/platforms/immersive-gallery.gif" aria-pressed="false" aria-label="Play animation: immersive environment">
+            <img src="img/platforms/immersive-gallery-poster.webp" alt="Researcher inside a full-scale immersive projection environment" loading="lazy">
+          </button>
+          <figcaption><span>Immersive environments</span> Prototyping social and spatial interaction at human scale.</figcaption>
+        </figure>
+        <figure class="studio-card reveal">
+          <button class="motion-image" type="button" data-motion-image data-static="img/platforms/eye-tracking-poster.webp" data-animated="img/platforms/eye-tracking.gif" aria-pressed="false" aria-label="Play animation: eye-tracking experiment">
+            <img src="img/platforms/eye-tracking-poster.webp" alt="Eye-tracking marker moving across a simulated control task" loading="lazy">
+          </button>
+          <figcaption><span>Eye-tracking experiments</span> Examining visual attention and scan paths in simulated tasks.</figcaption>
+        </figure>
+        <figure class="studio-card studio-card-height reveal">
+          <button class="motion-image" type="button" data-motion-image data-static="img/platforms/height-exposure.webp" data-animated="img/platforms/height-exposure.gif" aria-pressed="false" aria-label="Play animation: adaptive height-exposure training">
+            <img src="img/platforms/height-exposure.webp" alt="Stereoscopic virtual glass walkway used in height-exposure training" loading="lazy">
+          </button>
+          <figcaption><span>Adaptive XR training</span> A height-exposure slice linked to real-time human-state feedback.</figcaption>
+        </figure>
       </div>
     </section>
 
@@ -151,17 +180,6 @@
 
       <div class="people-grid" data-people-grid aria-live="polite">
         <p class="content-loading">Loading the lab roster…</p>
-      </div>
-    </section>
-
-    <section class="section work" id="work" aria-labelledby="work-title">
-      <div class="section-label reveal"><span>06</span> Latest</div>
-      <div class="work-heading reveal">
-        <h2 id="work-title" class="display-title">Notes from<br><span>the moving edge.</span></h2>
-        <p>Recent papers, prototypes, and community work from PIS Lab.</p>
-      </div>
-      <div class="story-grid" data-news-grid aria-live="polite">
-        <p class="content-loading">Loading the latest work…</p>
       </div>
     </section>
 

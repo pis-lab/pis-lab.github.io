@@ -30,13 +30,23 @@
     "tags": ["Mobility", "Situation awareness", "Risk calibration"]
   },
   {
-    "name": "Tangible Intelligence",
-    "category": "Embodied collaboration",
+    "name": "Tangible Informatics",
+    "category": "Interaction methodology",
     "headline": "Making intelligent processes visible, understandable and controllable.",
-    "description": "We turn opaque sensing, reasoning and planning into shared objects and boundaries that people can inspect, question, steer and safely override across interfaces, robots and intelligent environments.",
+    "description": "We develop interaction-design methods and prototypes that externalize system states, reasoning, boundaries and consequences, so people can inspect, question and steer intelligent behavior.",
+    "image": "img/projects/tangible-informatics.webp",
+    "alt": "Hands arranging transparent interface cards and physical tokens to prototype an understandable intelligent process",
+    "stage": "Design methodology",
+    "tags": ["Tangible informatics", "Interaction prototyping", "Human understanding"]
+  },
+  {
+    "name": "VLA + World Models",
+    "category": "Embodied AI",
+    "headline": "Connecting perception, language and action in the physical world.",
+    "description": "We are exploring how vision–language–action systems and world models connect scene understanding, task intent, prediction and action in embodied agents, while keeping human oversight and system boundaries explicit.",
     "image": "img/research/embodied-intelligence.webp",
-    "alt": "Robotic system combining spatial perception, motion planning and physical action",
-    "stage": "Method + platform",
-    "tags": ["Cognitive collaboration", "Embodied AI", "Human control"]
+    "alt": "Robotic system combining spatial perception, scene understanding and physical action",
+    "stage": "Emerging direction",
+    "tags": ["VLA", "World models", "Embodied reasoning"]
   }
 ]

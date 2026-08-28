@@ -62,22 +62,6 @@ function escapeHTML(value = '') {
   })[character]);
 }
 
-function storyMarkup(story) {
-  const layoutClass = story.layout === 'featured'
-    ? ' story-featured'
-    : story.layout === 'wide' ? ' story-wide' : '';
-  const imageClass = story.imageFit === 'contain' ? ' light-image' : '';
-  const meta = `<div class="story-meta"><span>${escapeHTML(story.category)}</span><time datetime="${escapeHTML(story.datetime)}">${escapeHTML(story.date)}</time></div>`;
-  const description = story.description ? `<p>${escapeHTML(story.description)}</p>` : '';
-  const words = `${meta}<h3>${escapeHTML(story.title)}</h3>${description}`;
-
-  return `<a class="story${layoutClass} reveal" href="${escapeHTML(story.href)}" target="_blank" rel="noreferrer">
-    <div class="story-image${imageClass}"><img src="${escapeHTML(story.image)}" alt="${escapeHTML(story.alt)}" loading="lazy"></div>
-    ${story.layout === 'wide' ? `<div class="story-body">${words}</div>` : words}
-    <b class="story-arrow" aria-hidden="true">↗</b>
-  </a>`;
-}
-
 function personMarkup(person) {
   const email = person.email
     ? `<a href="mailto:${escapeHTML(person.email)}">Email ↗</a>`
@@ -118,8 +102,40 @@ async function hydrateContent(url, selector, renderer) {
   }
 }
 
+function setMotionState(control, playing) {
+  const image = control.querySelector('img');
+  if (!image) return;
+
+  image.src = playing ? control.dataset.animated : control.dataset.static;
+  control.classList.toggle('is-playing', playing);
+  control.setAttribute('aria-pressed', String(playing));
+}
+
+document.querySelectorAll('[data-motion-image]').forEach((control) => {
+  control.addEventListener('pointerenter', (event) => {
+    if (event.pointerType === 'mouse') setMotionState(control, true);
+  });
+
+  control.addEventListener('pointerleave', (event) => {
+    if (event.pointerType === 'mouse') setMotionState(control, false);
+  });
+
+  control.addEventListener('click', (event) => {
+    const keyboardActivation = event.detail === 0;
+    const touchFirst = !window.matchMedia('(hover: hover)').matches;
+    if (keyboardActivation || touchFirst) {
+      setMotionState(control, control.getAttribute('aria-pressed') !== 'true');
+      return;
+    }
+    setMotionState(control, true);
+  });
+
+  control.addEventListener('blur', () => {
+    if (window.matchMedia('(hover: hover)').matches) setMotionState(control, false);
+  });
+});
+
 observeReveals();
 hydrateContent('content/projects.json', '[data-projects]', projectMarkup);
-hydrateContent('content/news.json', '[data-news-grid]', storyMarkup);
 hydrateContent('content/people.json', '[data-people-grid]', personMarkup);
 document.querySelector('[data-year]').textContent = new Date().getFullYear();
