@@ -5,7 +5,7 @@
   --white: #fff;
   --line: rgba(17, 17, 15, 0.24);
   --muted: #6d6b66;
-  --secondary-ink: #65635f;
+  --secondary-ink: #76736e;
   --github: #57606a;
   --pad: clamp(1.25rem, 3vw, 3.5rem);
   --display: "Arial Narrow", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -72,7 +72,8 @@ button { color: inherit; font: inherit; }
 @keyframes ticker { to { transform: translateX(calc(-100% / 6)); } }
 
 .section { border-bottom: 1px solid var(--ink); padding: 0 var(--pad) clamp(5rem, 10vw, 10rem); }
-.section-label { align-items: center; border-bottom: 1px solid var(--ink); display: flex; font-size: .84rem; font-weight: 800; gap: .9rem; letter-spacing: .08em; padding: 1.15rem 0; text-transform: uppercase; }
+.section-label { --label-rule: var(--ink); align-items: center; display: flex; font-size: .84rem; font-weight: 800; gap: .9rem; letter-spacing: .08em; max-width: 100%; padding: 1.15rem 0; position: relative; text-transform: uppercase; width: max-content; }
+.section-label::after { background: var(--label-rule); bottom: 0; content: ""; height: 1px; left: 0; position: absolute; width: 100%; }
 .section-label span { color: var(--red); }
 .about-grid { display: grid; gap: clamp(3rem, 8vw, 10rem); grid-template-columns: 1.5fr 1fr; padding-top: clamp(4rem, 8vw, 8rem); }
 .display-title { font-size: clamp(3.3rem, 6.35vw, 7.7rem); letter-spacing: -.035em; line-height: .96; }
@@ -100,7 +101,7 @@ button { color: inherit; font: inherit; }
 .principle-grid p { color: var(--muted); font-size: .93rem; line-height: 1.4; margin: 0; }
 
 .projects { background: var(--ink); color: var(--white); }
-.projects .section-label { border-color: rgba(255,255,255,.45); }
+.projects .section-label { --label-rule: rgba(255,255,255,.45); }
 .projects-heading h2 { font-family: var(--display); font-size: clamp(4rem, 8vw, 9.2rem); font-weight: 800; letter-spacing: -.065em; line-height: .82; margin: 0; text-transform: uppercase; }
 .projects-heading h2 i { color: var(--red); font-family: Georgia, "Times New Roman", serif; font-weight: 400; text-transform: none; }
 .projects-list { border-top: 1px solid rgba(255,255,255,.45); }
@@ -158,7 +159,7 @@ button { color: inherit; font: inherit; }
 .about-copy .lead { font-size: clamp(1.35rem, 2.15vw, 2rem); font-weight: 700; letter-spacing: -.035em; line-height: 1.15; }
 
 .research { background: var(--ink); color: var(--white); }
-.research .section-label { border-color: rgba(255,255,255,.45); }
+.research .section-label { --label-rule: rgba(255,255,255,.45); }
 .section-intro, .work-heading, .people-heading { align-items: end; display: grid; gap: 3rem; grid-template-columns: 1.5fr 1fr; padding: clamp(4rem, 8vw, 8rem) 0 clamp(3rem, 6vw, 6rem); }
 .section-intro p, .work-heading p, .people-heading p { font-size: clamp(1rem, 1.5vw, 1.35rem); line-height: 1.4; margin: 0; max-width: 32rem; }
 .research-grid { border-left: 1px solid rgba(255,255,255,.4); display: grid; grid-template-columns: repeat(2, 1fr); }
@@ -234,7 +235,7 @@ button { color: inherit; font: inherit; }
 .person-profile-link:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 
 .life { background: #1d2748; color: var(--white); padding-bottom: clamp(5rem, 8vw, 8rem); }
-.section-label-light { border-color: rgba(255,255,255,.5); }
+.section-label-light { --label-rule: rgba(255,255,255,.5); }
 .life-intro { align-items: end; display: grid; gap: 2rem; grid-template-columns: 1.5fr 1fr; padding: clamp(4rem, 8vw, 8rem) 0 3rem; }
 .life-intro h2 { font-size: clamp(4rem, 9vw, 10rem); }
 .life-intro h2 i { color: var(--red); font-family: Georgia, serif; font-weight: 400; text-transform: none; }
