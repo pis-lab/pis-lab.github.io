@@ -5,6 +5,8 @@
   --white: #fff;
   --line: rgba(17, 17, 15, 0.24);
   --muted: #6d6b66;
+  --secondary-ink: #65635f;
+  --github: #57606a;
   --pad: clamp(1.25rem, 3vw, 3.5rem);
   --display: "Arial Narrow", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --body: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -74,7 +76,7 @@ button { color: inherit; font: inherit; }
 .section-label span { color: var(--red); }
 .about-grid { display: grid; gap: clamp(3rem, 8vw, 10rem); grid-template-columns: 1.5fr 1fr; padding-top: clamp(4rem, 8vw, 8rem); }
 .display-title { font-size: clamp(3.3rem, 6.35vw, 7.7rem); letter-spacing: -.035em; line-height: .96; }
-.display-title span { color: transparent; display: inline-block; letter-spacing: .015em; line-height: 1.02; padding-right: .025em; -webkit-text-stroke: 1px var(--ink); word-spacing: .035em; }
+.display-title span { color: var(--secondary-ink); display: inline-block; letter-spacing: 0; line-height: 1.02; padding-right: .025em; text-shadow: none; word-spacing: .025em; }
 .idea-intro, .method-heading, .studio-heading, .projects-heading { align-items: end; display: grid; gap: clamp(3rem, 8vw, 10rem); grid-template-columns: 1.55fr 1fr; padding: clamp(4rem, 8vw, 8rem) 0 clamp(3rem, 6vw, 6rem); }
 .idea-copy p, .method-heading p, .studio-heading p, .projects-heading p { font-size: clamp(1rem, 1.45vw, 1.3rem); line-height: 1.45; margin: 0; max-width: 34rem; }
 .idea-copy .lead { font-size: clamp(1.45rem, 2.25vw, 2.15rem); font-weight: 750; letter-spacing: -.04em; line-height: 1.08; margin-bottom: 1.4rem; }
@@ -88,9 +90,11 @@ button { color: inherit; font: inherit; }
 .principle-grid span, .project-top span { color: var(--red); font-size: .78rem; font-weight: 850; letter-spacing: .08em; }
 .ui-icon { display: block; height: auto; overflow: visible; width: clamp(3.5rem, 5vw, 4.8rem); }
 .icon-line, .icon-accent-line { fill: none; stroke: var(--ink); stroke-linecap: square; stroke-linejoin: miter; stroke-width: 1.7; vector-effect: non-scaling-stroke; }
-.icon-accent-line { stroke: var(--red); stroke-width: 2.2; }
+.icon-accent-line { stroke: var(--red); stroke-width: 2.2; transform-box: fill-box; transform-origin: center; transition: transform .25s cubic-bezier(.16,1,.3,1); }
 .icon-accent { fill: var(--red); transform-box: fill-box; transform-origin: center; transition: transform .25s cubic-bezier(.16,1,.3,1); }
-.principle-grid li:hover .icon-accent, .method-steps li:hover .icon-accent { transform: scale(1.18); }
+.icon-accent-static { fill: var(--red); }
+.principle-grid li:hover .icon-accent, .method-steps li:is(:hover, :focus, :active) .icon-accent { transform: scale(1.18); }
+.principle-grid li:hover .icon-accent-line, .method-steps li:is(:hover, :focus, :active) .icon-accent-line { transform: scale(1.12); }
 .principle-grid .ui-icon { margin-top: auto; padding-top: 1.5rem; }
 .principle-grid h3 { font-size: clamp(1.55rem, 2.2vw, 2.5rem); letter-spacing: -.05em; line-height: .95; margin: 2.25rem 0 .8rem; overflow-wrap: anywhere; text-transform: uppercase; }
 .principle-grid p { color: var(--muted); font-size: .93rem; line-height: 1.4; margin: 0; }
@@ -130,7 +134,10 @@ button { color: inherit; font: inherit; }
 .method-case-flow span { font-size: clamp(.82rem, 1.05vw, 1rem); font-weight: 750; letter-spacing: -.015em; line-height: 1.15; margin-top: 1rem; text-transform: uppercase; }
 .method-case-flow .ui-icon { margin-top: auto; padding-top: 1rem; width: 3.4rem; }
 .method-steps { border-left: 1px solid var(--ink); display: grid; grid-template-columns: repeat(4, 1fr); list-style: none; margin: 0; padding: 0; }
-.method-steps li { border-bottom: 1px solid var(--ink); border-right: 1px solid var(--ink); border-top: 1px solid var(--ink); display: flex; flex-direction: column; min-height: 22rem; padding: 1rem; }
+.method-steps li { border-bottom: 1px solid var(--ink); border-right: 1px solid var(--ink); border-top: 1px solid var(--ink); display: flex; flex-direction: column; min-height: 22rem; outline: none; padding: 1rem; }
+.method-steps li:focus-visible { box-shadow: inset 0 -3px var(--red); }
+.method-steps li:first-child:is(:hover, :focus, :active) .icon-accent-line { transform: rotate(45deg) scale(.92); }
+.method-steps li:nth-child(2):is(:hover, :focus, :active) .icon-accent-line { transform: translateX(3px); }
 .method-steps span { color: var(--red); font-size: .78rem; font-weight: 850; letter-spacing: .08em; }
 .method-steps .ui-icon { margin-top: auto; padding-top: 1.5rem; width: clamp(3.5rem, 4.3vw, 4.5rem); }
 .method-steps h3 { font-size: clamp(1.9rem, 3vw, 3.8rem); letter-spacing: -.06em; line-height: .9; margin: 3.25rem 0 .85rem; overflow-wrap: anywhere; text-transform: uppercase; }
@@ -153,7 +160,6 @@ button { color: inherit; font: inherit; }
 .research { background: var(--ink); color: var(--white); }
 .research .section-label { border-color: rgba(255,255,255,.45); }
 .section-intro, .work-heading, .people-heading { align-items: end; display: grid; gap: 3rem; grid-template-columns: 1.5fr 1fr; padding: clamp(4rem, 8vw, 8rem) 0 clamp(3rem, 6vw, 6rem); }
-.research .display-title span { -webkit-text-stroke-color: var(--white); }
 .section-intro p, .work-heading p, .people-heading p { font-size: clamp(1rem, 1.5vw, 1.35rem); line-height: 1.4; margin: 0; max-width: 32rem; }
 .research-grid { border-left: 1px solid rgba(255,255,255,.4); display: grid; grid-template-columns: repeat(2, 1fr); }
 .research-card { border-bottom: 1px solid rgba(255,255,255,.4); border-right: 1px solid rgba(255,255,255,.4); border-top: 1px solid rgba(255,255,255,.4); display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(15.5rem, .95fr); min-height: 31rem; overflow: hidden; transition: background .25s, color .25s; }
@@ -217,13 +223,15 @@ button { color: inherit; font: inherit; }
 .person-focus { color: var(--muted); font-size: .9rem; }
 .person-email { bottom: 1rem; font-size: .78rem; font-weight: 800; position: absolute; right: 1rem; text-transform: uppercase; }
 .person-profile-links { display: inline-flex; flex: none; gap: .3rem; }
-.person-profile-link { align-items: center; border: 0; color: var(--ink); display: inline-flex; height: 1.75rem; justify-content: center; transition: color .2s, transform .2s; width: 1.75rem; }
+.person-profile-link { align-items: center; border: 0; display: inline-flex; height: 1.75rem; justify-content: center; transition: color .2s, opacity .2s, transform .2s; width: 1.75rem; }
 .person-profile-link svg { display: block; height: 1.08rem; width: 1.08rem; }
 .profile-icon-ecnu { display: block; height: 1.08rem; overflow: hidden; position: relative; width: 1.08rem; }
-.profile-icon-ecnu img { filter: invert(1); height: 1.08rem; max-width: none; position: absolute; transition: filter .2s; width: auto; }
-.person-profile-link:hover, .person-profile-link:focus-visible { color: var(--red); transform: translateY(-1px); }
-.person-profile-link:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
-.person-profile-link-ecnu:hover img, .person-profile-link-ecnu:focus-visible img { filter: brightness(0) saturate(100%) invert(36%) sepia(92%) saturate(2570%) hue-rotate(345deg) brightness(99%) contrast(92%); }
+.profile-icon-ecnu img { filter: brightness(0) saturate(100%) invert(18%) sepia(76%) saturate(3224%) hue-rotate(342deg) brightness(91%) contrast(93%); height: 1.08rem; max-width: none; position: absolute; width: auto; }
+.person-profile-link-github { color: var(--github); }
+.person-profile-link:hover, .person-profile-link:focus-visible { transform: translateY(-1px); }
+.person-profile-link-github:hover, .person-profile-link-github:focus-visible { color: var(--ink); }
+.person-profile-link-ecnu:hover, .person-profile-link-ecnu:focus-visible { opacity: .72; }
+.person-profile-link:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 
 .life { background: #1d2748; color: var(--white); padding-bottom: clamp(5rem, 8vw, 8rem); }
 .section-label-light { border-color: rgba(255,255,255,.5); }
@@ -340,7 +348,7 @@ button { color: inherit; font: inherit; }
   .brand-name { font-size: 1.15rem; }
   .menu-toggle { padding: 0 1rem; }
   .display-title { font-size: clamp(2.65rem, 12.5vw, 3.6rem); letter-spacing: -.015em; line-height: 1; max-width: 100%; overflow-wrap: anywhere; }
-  .display-title span { letter-spacing: .03em; line-height: 1.06; overflow-wrap: normal; -webkit-text-stroke-width: 1px; word-break: normal; word-spacing: .055em; }
+  .display-title span { letter-spacing: .01em; line-height: 1.06; overflow-wrap: normal; word-break: normal; word-spacing: .04em; }
   .studio-heading .display-title { font-size: clamp(2.55rem, 11.8vw, 3.4rem); }
   .idea-visual figcaption { font-size: 1rem; }
   .section-intro, .work-heading, .people-heading, .life-intro { gap: 1.5rem; padding-top: 3.5rem; }
