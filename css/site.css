@@ -20,6 +20,7 @@ body.nav-open .site-header { inset: 0 0 auto; position: fixed; width: 100%; }
 img { display: block; width: 100%; }
 a { color: inherit; text-decoration: none; }
 button { color: inherit; font: inherit; }
+main img { -webkit-user-drag: none; user-select: none; }
 ::selection { background: var(--red); color: var(--white); }
 
 .skip-link { position: fixed; left: 1rem; top: -5rem; z-index: 1000; background: var(--white); padding: .8rem 1rem; }
@@ -129,11 +130,16 @@ button { color: inherit; font: inherit; }
 .method-case-intro h3 { font-size: clamp(2rem, 3.2vw, 3.8rem); letter-spacing: -.055em; line-height: .9; margin: 2.5rem 0 1rem; text-transform: uppercase; }
 .method-case-intro p { color: rgba(255,255,255,.7); font-size: .88rem; line-height: 1.45; margin: 0; max-width: 26rem; }
 .method-case-flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); list-style: none; margin: 0; padding: 0; }
-.method-case-flow li { display: flex; flex-direction: column; min-height: 14rem; padding: 1rem; }
+.method-case-flow li { display: flex; flex-direction: column; min-height: 18rem; padding: 1rem; }
 .method-case-flow li + li { border-left: 1px solid var(--ink); }
 .method-case-flow b { color: var(--red); font-size: .72rem; letter-spacing: .08em; }
 .method-case-flow span { font-size: clamp(.82rem, 1.05vw, 1rem); font-weight: 750; letter-spacing: -.015em; line-height: 1.15; margin-top: 1rem; text-transform: uppercase; }
-.method-case-flow .ui-icon { margin-top: auto; padding-top: 1rem; width: 3.4rem; }
+.method-scene { display: block; height: auto; margin: auto 0 0; overflow: visible; width: 100%; }
+.scene-line, .scene-accent-line-static { fill: none; stroke: var(--ink); stroke-linecap: square; stroke-linejoin: miter; stroke-width: 1.45; vector-effect: non-scaling-stroke; }
+.scene-soft { fill: rgba(17,17,15,.035); stroke: var(--ink); stroke-width: 1.2; vector-effect: non-scaling-stroke; }
+.scene-accent { fill: var(--red); }
+.scene-accent-line-static { stroke: var(--red); stroke-width: 2; }
+.scene-equation { fill: var(--ink); font-family: var(--mono); font-size: 17px; font-weight: 750; letter-spacing: -.04em; }
 .method-steps { border-left: 1px solid var(--ink); display: grid; grid-template-columns: repeat(4, 1fr); list-style: none; margin: 0; padding: 0; }
 .method-steps li { border-bottom: 1px solid var(--ink); border-right: 1px solid var(--ink); border-top: 1px solid var(--ink); display: flex; flex-direction: column; min-height: 22rem; outline: none; padding: 1rem; }
 .method-steps li:focus-visible { box-shadow: inset 0 -3px var(--red); }
@@ -211,12 +217,12 @@ button { color: inherit; font: inherit; }
 .people { background: var(--paper); }
 .people-grid { border-left: 1px solid var(--ink); display: grid; grid-template-columns: repeat(var(--people-columns, 4), 1fr); }
 .person { border-bottom: 1px solid var(--ink); border-right: 1px solid var(--ink); border-top: 1px solid var(--ink); overflow: hidden; }
-.person > .person-photo { aspect-ratio: 1; filter: grayscale(1); object-fit: cover; transition: filter .3s, transform .55s cubic-bezier(.16,1,.3,1); }
+.person > .person-photo { aspect-ratio: 1; filter: saturate(.48) brightness(1.055) contrast(.94); object-fit: cover; transition: filter .3s, transform .55s cubic-bezier(.16,1,.3,1); }
 .person > .person-photo-top { object-position: center top; }
 .person > .person-photo-high { object-position: center 35%; }
 .people-grid[data-columns="4"][data-remainder="1"] .person:last-child { grid-column: 2 / span 2; justify-self: center; width: calc(50% - .5px); }
 .people-grid[data-columns="4"][data-remainder="2"] .person:nth-last-child(2) { grid-column: 2; }
-.person:hover > .person-photo { filter: grayscale(0); transform: scale(1.035); }
+.person:hover > .person-photo { filter: saturate(1) brightness(1) contrast(1); transform: scale(1.035); }
 .person-info { min-height: 12rem; padding: 1rem; position: relative; }
 .person-info p { color: var(--red); font-size: .78rem; font-weight: 800; letter-spacing: .08em; margin: 0 0 2rem; text-transform: uppercase; }
 .person-name-row { align-items: center; display: flex; gap: .6rem; margin: 0 0 .5rem; }
@@ -317,7 +323,7 @@ button { color: inherit; font: inherit; }
   .project-image { aspect-ratio: 3 / 2; min-height: 0; }
   .project-copy { min-height: 29rem; }
   .method-case-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .method-case-flow li { border-bottom: 1px solid var(--ink); min-height: 12rem; }
+  .method-case-flow li { border-bottom: 1px solid var(--ink); min-height: 16.5rem; }
   .method-case-flow li:nth-child(odd) { border-left: 0; }
   .method-steps { grid-template-columns: 1fr; }
   .method-steps li, .method-steps li:last-child { grid-column: auto; min-height: 20rem; }
