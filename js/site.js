@@ -71,6 +71,60 @@ function disableContentImageDragging(root = document) {
   });
 }
 
+function imageVariantKey(source) {
+  return source
+    .replace(/^img\//, '')
+    .replace(/\.[^./]+$/, '')
+    .replace(/[^a-z0-9]+/gi, '-')
+    .replace(/^-|-$/g, '')
+    .toLowerCase();
+}
+
+function progressiveImageMarkup(source, alt, className, widths) {
+  const key = imageVariantKey(source);
+  const candidates = widths
+    .map((width) => `img/optimized/${key}-${width}.webp ${width}w`)
+    .join(', ');
+  return `<img class="${escapeHTML(className)} progressive-image" src="img/optimized/${key}-48.webp" data-srcset="${candidates}" data-progressive-image alt="${escapeHTML(alt)}" loading="lazy" decoding="async" draggable="false">`;
+}
+
+function upgradeProgressiveImage(image) {
+  if (!image || image.dataset.upgraded === 'true') return;
+  const candidates = (image.dataset.srcset ?? '').split(',').map((candidate) => {
+    const match = candidate.trim().match(/^(.*)\s+(\d+)w$/);
+    return match ? { src: match[1], width: Number(match[2]) } : null;
+  }).filter(Boolean).sort((a, b) => a.width - b.width);
+  if (!candidates.length) return;
+
+  const renderedWidth = image.getBoundingClientRect().width || window.innerWidth;
+  const targetWidth = renderedWidth * Math.min(window.devicePixelRatio || 1, 2);
+  const selected = candidates.find((candidate) => candidate.width >= targetWidth) ?? candidates.at(-1);
+  if (!selected) return;
+
+  image.dataset.upgraded = 'true';
+  image.src = selected.src;
+}
+
+const progressiveImageObserver = 'IntersectionObserver' in window
+  ? new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        upgradeProgressiveImage(entry.target);
+        observer.unobserve(entry.target);
+      });
+    }, { rootMargin: '500px 0px' })
+  : null;
+
+function initializeProgressiveImages(root = document) {
+  root.querySelectorAll('[data-progressive-image]').forEach((image) => {
+    if (image.hasAttribute('data-progressive-eager') || !progressiveImageObserver) {
+      upgradeProgressiveImage(image);
+    } else {
+      progressiveImageObserver.observe(image);
+    }
+  });
+}
+
 const profileIcons = {
   github: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2.22c-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.97.1-.75.4-1.26.73-1.55-2.56-.29-5.25-1.28-5.25-5.69 0-1.26.45-2.28 1.19-3.08-.12-.29-.52-1.46.11-3.04 0 0 .97-.31 3.17 1.18A11.1 11.1 0 0 1 12 6c.98 0 1.95.13 2.87.39 2.2-1.49 3.17-1.18 3.17-1.18.63 1.58.23 2.75.11 3.04.74.8 1.19 1.82 1.19 3.08 0 4.42-2.7 5.39-5.27 5.68.42.36.78 1.06.78 2.14v3.2c0 .31.21.68.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>',
   ecnu: '<span class="profile-icon-ecnu" aria-hidden="true"><img src="img/logo/ecnu-logo.svg" alt=""></span>'
@@ -94,7 +148,7 @@ function personMarkup(person) {
     ? ' person-photo-top'
     : person.position === 'center 35%' ? ' person-photo-high' : '';
   return `<article class="person${person.lead ? ' person-lead' : ''} reveal">
-    <img class="person-photo${photoPositionClass}" src="${escapeHTML(person.image)}" alt="${escapeHTML(person.alt)}" loading="lazy">
+    ${progressiveImageMarkup(person.image, person.alt, `person-photo${photoPositionClass}`, [320, 640, 960])}
     <div class="person-info"><p>${escapeHTML(person.role)}</p><div class="person-name-row"><h3>${escapeHTML(person.name)}</h3>${profileLinks}</div><span class="person-focus">${escapeHTML(person.focus)}</span>${email}</div>
   </article>`;
 }
@@ -102,7 +156,7 @@ function personMarkup(person) {
 function projectMarkup(project, index) {
   const tags = project.tags.map((tag) => `<li>${escapeHTML(tag)}</li>`).join('');
   return `<article class="project-feature reveal">
-    <div class="project-image"><img src="${escapeHTML(project.image)}" alt="${escapeHTML(project.alt)}" loading="lazy"></div>
+    <div class="project-image">${progressiveImageMarkup(project.image, project.alt, '', [640, 960, 1440])}</div>
     <div class="project-copy">
       <div class="project-top"><span>${String(index + 1).padStart(2, '0')}</span><b>${escapeHTML(project.stage)}</b></div>
       <p class="project-category">${escapeHTML(project.category)}</p>
@@ -124,6 +178,7 @@ async function hydrateContent(url, selector, renderer, afterRender) {
     container.innerHTML = items.map(renderer).join('');
     afterRender?.(container, items);
     disableContentImageDragging(container);
+    initializeProgressiveImages(container);
     observeReveals(container);
   } catch (error) {
     console.error(error);
@@ -142,6 +197,7 @@ function setMotionState(control, playing) {
   const image = control.querySelector('img');
   if (!image) return;
 
+  image.dataset.upgraded = 'true';
   image.src = playing ? control.dataset.animated : control.dataset.static;
   control.classList.toggle('is-playing', playing);
   control.setAttribute('aria-pressed', String(playing));
@@ -173,5 +229,6 @@ document.querySelectorAll('[data-motion-image]').forEach((control) => {
 
 observeReveals();
 disableContentImageDragging();
+initializeProgressiveImages();
 hydrateContent('content/projects.json', '[data-projects]', projectMarkup);
 hydrateContent('content/people.json', '[data-people-grid]', personMarkup, configurePeopleGrid);
