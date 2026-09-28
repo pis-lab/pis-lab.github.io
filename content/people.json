@@ -68,5 +68,13 @@
     "focus": "Tangible Informatics",
     "image": "img/member/dgh.jpg",
     "alt": "Martin G.H. Dai"
+  },
+  {
+    "role": "Research assistant",
+    "name": "Jerry Z.L. Cao",
+    "focus": "Embodied Robotics / Human-Robot Interaction",
+    "image": "img/member/jerry-zl-cao.png",
+    "alt": "Jerry Z.L. Cao",
+    "position": "top"
   }
 ]
