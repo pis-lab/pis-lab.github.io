@@ -2,6 +2,7 @@ import { createServer } from 'node:http';
 import { access, mkdir, readFile, rename, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { renderContent } from './render-content.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const studioPage = path.join(root, 'tools', 'content-studio.html');
@@ -189,6 +190,7 @@ const server = createServer(async (request, response) => {
         ? await addProject(payload)
         : payload.kind === 'person' ? await addPerson(payload) : null;
       if (!result) throw new Error('Choose Working System or People.');
+      await renderContent();
       sendJSON(response, 200, { ok: true, kind: payload.kind, ...result });
       return;
     }

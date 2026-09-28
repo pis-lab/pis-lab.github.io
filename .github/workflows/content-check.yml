@@ -6,7 +6,9 @@ on:
       - 'content/**'
       - 'img/**'
       - 'scripts/validate-content.mjs'
-      - 'scripts/test-content-loading.mjs'
+      - 'scripts/**'
+      - 'index.html'
+      - 'package.json'
       - 'js/site.js'
   push:
     branches: [main]
@@ -14,7 +16,9 @@ on:
       - 'content/**'
       - 'img/**'
       - 'scripts/validate-content.mjs'
-      - 'scripts/test-content-loading.mjs'
+      - 'scripts/**'
+      - 'index.html'
+      - 'package.json'
       - 'js/site.js'
 
 permissions:
@@ -29,4 +33,5 @@ jobs:
         with:
           node-version: 22
       - run: node scripts/validate-content.mjs
+      - run: node scripts/render-content.mjs --check
       - run: node --test scripts/test-content-loading.mjs

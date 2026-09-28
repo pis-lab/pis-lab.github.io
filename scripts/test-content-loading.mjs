@@ -1,83 +1,61 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { access, readFile } from 'node:fs/promises';
 import test from 'node:test';
-import vm from 'node:vm';
+import { escapeHTML, personMarkup, projectMarkup, renderPage, renderContent } from './render-content.mjs';
 
-const source = await readFile(new URL('../js/site.js', import.meta.url), 'utf8');
-const start = source.indexOf('async function hydrateContent(');
-const end = source.indexOf('\nfunction configurePeopleGrid(', start);
-assert.ok(start >= 0 && end > start, 'Find the production content loader');
-const loaderSource = source.slice(start, end);
+const root = new URL('../', import.meta.url);
+const html = await readFile(new URL('index.html', root), 'utf8');
+const script = await readFile(new URL('js/site.js', root), 'utf8');
+const people = JSON.parse(await readFile(new URL('content/people.json', root), 'utf8'));
+const projects = JSON.parse(await readFile(new URL('content/projects.json', root), 'utf8'));
 
-function harness({ data = [], ok = true, timestamp = 1000, present = true } = {}) {
-  const container = { innerHTML: '' };
-  const requests = [];
-  const initialized = [];
-  const errors = [];
-  const context = vm.createContext({
-    URL,
-    Date: { now: () => timestamp },
-    document: {
-      baseURI: 'https://pis-lab.github.io/',
-      querySelector: () => present ? container : null,
-    },
-    fetch: async (url, options) => {
-      requests.push({ url: String(url), cache: options.cache });
-      return { ok, status: ok ? 200 : 503, json: async () => data };
-    },
-    console: { error: error => errors.push(error) },
-    disableContentImageDragging: root => initialized.push(['drag', root]),
-    initializeProgressiveImages: root => initialized.push(['images', root]),
-    observeReveals: root => initialized.push(['reveal', root]),
-  });
-  vm.runInContext(loaderSource, context);
-  return { load: context.hydrateContent, container, requests, initialized, errors };
-}
-
-test('each page load requests a fresh member manifest without HTTP caching', async () => {
-  const first = harness({ timestamp: 1000 });
-  const second = harness({ timestamp: 2000 });
-  await first.load('content/people.json', '[data-people-grid]', () => '');
-  await second.load('content/people.json', '[data-people-grid]', () => '');
-  assert.equal(first.requests[0].url, 'https://pis-lab.github.io/content/people.json?v=1000');
-  assert.equal(second.requests[0].url, 'https://pis-lab.github.io/content/people.json?v=2000');
-  assert.equal(first.requests[0].cache, 'no-store');
-  assert.equal(second.requests[0].cache, 'no-store');
+test('first HTML response includes every member and project without executing JavaScript', () => {
+  assert.equal((html.match(/<article class="person(?: person-lead)?"/g) ?? []).length, people.length);
+  assert.equal((html.match(/<article class="project-feature"/g) ?? []).length, projects.length);
+  for (const person of people) {
+    assert.ok(html.includes('<h3>' + escapeHTML(person.name) + '</h3>'));
+    assert.ok(html.includes(escapeHTML(person.focus)));
+  }
+  assert.match(html, /Jerry Z\.L\. Cao/);
+  assert.doesNotMatch(html, /Loading the lab roster|Loading current projects|aria-live="polite"/);
+  assert.doesNotMatch(script, /fetch\s*\(|hydrateContent/);
 });
 
-test('all members render and existing image/grid initializers still run', async () => {
-  const people = JSON.parse(await readFile(new URL('../content/people.json', import.meta.url), 'utf8'));
-  const state = harness({ data: people });
-  let callbackPeople;
-  await state.load('content/people.json', '[data-people-grid]', person => `<h3>${person.name}</h3>`, (root, items) => {
-    assert.equal(root, state.container);
-    callbackPeople = items;
-  });
-  assert.equal(callbackPeople.length, people.length);
-  assert.equal((state.container.innerHTML.match(/<h3>/g) ?? []).length, people.length);
-  assert.match(state.container.innerHTML, /Jerry Z\.L\. Cao/);
-  assert.deepEqual(state.initialized.map(([name]) => name), ['drag', 'images', 'reveal']);
-  assert.ok(state.initialized.every(([, root]) => root === state.container));
-  assert.equal(state.errors.length, 0);
+test('generated content stays synchronized with the JSON source', async () => {
+  await renderContent({ check: true });
+  assert.equal(renderPage(html, people, projects), html);
 });
 
-test('project data uses the same freshness policy, preserving existing query parameters', async () => {
-  const state = harness();
-  await state.load('content/projects.json?lang=en', '[data-projects]', () => '');
-  assert.equal(state.requests[0].url, 'https://pis-lab.github.io/content/projects.json?lang=en&v=1000');
-  assert.equal(state.requests[0].cache, 'no-store');
+test('a new member updates the static card and last-row layout together', () => {
+  const newPerson = { ...people.at(-1), name: 'Test member <&>', focus: 'Robot & human' };
+  const changed = renderPage(html, [...people, newPerson], projects);
+  assert.ok(changed.includes('<h3>' + escapeHTML(newPerson.name) + '</h3>'));
+  assert.ok(changed.includes('data-remainder="' + ((people.length + 1) % 4) + '"'));
+  assert.equal((changed.match(/<article class="person(?: person-lead)?"/g) ?? []).length, people.length + 1);
 });
 
-test('a failed request shows the existing error state instead of stale content', async () => {
-  const state = harness({ ok: false });
-  await state.load('content/people.json', '[data-people-grid]', () => '');
-  assert.match(state.container.innerHTML, /Content is temporarily unavailable/);
-  assert.equal(state.errors.length, 1);
-  assert.equal(state.initialized.length, 0);
+test('all card photos use native responsive images without a script-dependent placeholder', async () => {
+  const cards = [...people.map(personMarkup), ...projects.map(projectMarkup)].join('\n');
+  assert.doesNotMatch(cards, /data-srcset|data-progressive-image|-48\.webp/);
+  const images = [...cards.matchAll(/<img\b[^>]*srcset=[^>]+>/g)];
+  assert.equal(images.length, people.length + projects.length);
+  for (const [image] of images) {
+    assert.match(image, /sizes="/);
+    assert.match(image, /loading="lazy"/);
+    assert.match(image, /draggable="false"/);
+  }
+  const assets = [...new Set([...cards.matchAll(/img\/optimized\/[^\s",]+\.webp/g)].map(match => match[0]))];
+  await Promise.all(assets.map(asset => access(new URL(asset, root))));
 });
 
-test('pages without a content container make no request', async () => {
-  const state = harness({ present: false });
-  await state.load('content/people.json', '[data-people-grid]', () => '');
-  assert.equal(state.requests.length, 0);
+test('profile links, focus crops and safe escaping are preserved', () => {
+  const jerry = personMarkup(people.find(person => person.name === 'Jerry Z.L. Cao'));
+  assert.match(jerry, /person-photo-top/);
+  const director = personMarkup(people.find(person => person.lead));
+  assert.match(director, /person-profile-link-github/);
+  assert.match(director, /person-profile-link-ecnu/);
+  assert.match(director, /mailto:/);
+  const unsafe = personMarkup({ ...people[0], name: '<script>alert(1)</script>', links: [{kind:'github', href:'javascript:alert(1)'}] });
+  assert.doesNotMatch(unsafe, /<script>|javascript:/);
+  assert.match(unsafe, /&lt;script&gt;/);
 });

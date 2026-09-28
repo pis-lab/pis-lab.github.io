@@ -52,16 +52,6 @@ function observeReveals(root = document) {
   root.querySelectorAll('.reveal').forEach((item) => revealObserver.observe(item));
 }
 
-function escapeHTML(value = '') {
-  return String(value).replace(/[&<>'"]/g, (character) => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    "'": '&#39;',
-    '"': '&quot;'
-  })[character]);
-}
-
 function disableContentImageDragging(root = document) {
   const images = root === document
     ? document.querySelectorAll('main img')
@@ -69,23 +59,6 @@ function disableContentImageDragging(root = document) {
   images.forEach((image) => {
     image.draggable = false;
   });
-}
-
-function imageVariantKey(source) {
-  return source
-    .replace(/^img\//, '')
-    .replace(/\.[^./]+$/, '')
-    .replace(/[^a-z0-9]+/gi, '-')
-    .replace(/^-|-$/g, '')
-    .toLowerCase();
-}
-
-function progressiveImageMarkup(source, alt, className, widths) {
-  const key = imageVariantKey(source);
-  const candidates = widths
-    .map((width) => `img/optimized/${key}-${width}.webp ${width}w`)
-    .join(', ');
-  return `<img class="${escapeHTML(className)} progressive-image" src="img/optimized/${key}-48.webp" data-srcset="${candidates}" data-progressive-image alt="${escapeHTML(alt)}" loading="lazy" decoding="async" draggable="false">`;
 }
 
 function upgradeProgressiveImage(image) {
@@ -125,78 +98,6 @@ function initializeProgressiveImages(root = document) {
   });
 }
 
-const profileIcons = {
-  github: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2.22c-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.97.1-.75.4-1.26.73-1.55-2.56-.29-5.25-1.28-5.25-5.69 0-1.26.45-2.28 1.19-3.08-.12-.29-.52-1.46.11-3.04 0 0 .97-.31 3.17 1.18A11.1 11.1 0 0 1 12 6c.98 0 1.95.13 2.87.39 2.2-1.49 3.17-1.18 3.17-1.18.63 1.58.23 2.75.11 3.04.74.8 1.19 1.82 1.19 3.08 0 4.42-2.7 5.39-5.27 5.68.42.36.78 1.06.78 2.14v3.2c0 .31.21.68.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>',
-  ecnu: '<span class="profile-icon-ecnu" aria-hidden="true"><img src="img/logo/ecnu-logo.svg" alt=""></span>'
-};
-
-function profileLinksMarkup(person) {
-  if (!Array.isArray(person.links)) return '';
-  const links = person.links
-    .filter((link) => profileIcons[link.kind] && typeof link.href === 'string' && link.href.startsWith('https://'))
-    .map((link) => `<a class="person-profile-link person-profile-link-${escapeHTML(link.kind)}" href="${escapeHTML(link.href)}" target="_blank" rel="noreferrer" aria-label="${escapeHTML(link.label)}" title="${escapeHTML(link.label)}">${profileIcons[link.kind]}</a>`)
-    .join('');
-  return links ? `<span class="person-profile-links">${links}</span>` : '';
-}
-
-function personMarkup(person) {
-  const email = person.email
-    ? `<a class="person-email" href="mailto:${escapeHTML(person.email)}">Email ↗</a>`
-    : '';
-  const profileLinks = profileLinksMarkup(person);
-  const photoPositionClass = person.position === 'top'
-    ? ' person-photo-top'
-    : person.position === 'center 35%' ? ' person-photo-high' : '';
-  return `<article class="person${person.lead ? ' person-lead' : ''} reveal">
-    ${progressiveImageMarkup(person.image, person.alt, `person-photo${photoPositionClass}`, [320, 640, 960])}
-    <div class="person-info"><p>${escapeHTML(person.role)}</p><div class="person-name-row"><h3>${escapeHTML(person.name)}</h3>${profileLinks}</div><span class="person-focus">${escapeHTML(person.focus)}</span>${email}</div>
-  </article>`;
-}
-
-function projectMarkup(project, index) {
-  const tags = project.tags.map((tag) => `<li>${escapeHTML(tag)}</li>`).join('');
-  return `<article class="project-feature reveal">
-    <div class="project-image">${progressiveImageMarkup(project.image, project.alt, '', [640, 960, 1440])}</div>
-    <div class="project-copy">
-      <div class="project-top"><span>${String(index + 1).padStart(2, '0')}</span><b>${escapeHTML(project.stage)}</b></div>
-      <p class="project-category">${escapeHTML(project.category)}</p>
-      <h3>${escapeHTML(project.headline)}</h3>
-      <p>${escapeHTML(project.description)}</p>
-      <ul>${tags}</ul>
-      <strong>${escapeHTML(project.name)}</strong>
-    </div>
-  </article>`;
-}
-
-async function hydrateContent(url, selector, renderer, afterRender) {
-  const container = document.querySelector(selector);
-  if (!container) return;
-  try {
-    // Refresh small content manifests independently of cached scripts and images.
-    // A fresh URL also avoids an older JSON response at the Pages CDN edge.
-    const requestURL = new URL(url, document.baseURI);
-    requestURL.searchParams.set('v', String(Date.now()));
-    const response = await fetch(requestURL, { cache: 'no-store' });
-    if (!response.ok) throw new Error(`Content request failed: ${response.status}`);
-    const items = await response.json();
-    container.innerHTML = items.map(renderer).join('');
-    afterRender?.(container, items);
-    disableContentImageDragging(container);
-    initializeProgressiveImages(container);
-    observeReveals(container);
-  } catch (error) {
-    console.error(error);
-    container.innerHTML = '<p class="content-loading content-error">Content is temporarily unavailable. Please refresh the page.</p>';
-  }
-}
-
-function configurePeopleGrid(container, people) {
-  const columns = 4;
-  container.style.setProperty('--people-columns', columns);
-  container.dataset.columns = String(columns);
-  container.dataset.remainder = String(people.length % columns);
-}
-
 function setMotionState(control, playing) {
   const image = control.querySelector('img');
   if (!image) return;
@@ -234,5 +135,3 @@ document.querySelectorAll('[data-motion-image]').forEach((control) => {
 observeReveals();
 disableContentImageDragging();
 initializeProgressiveImages();
-hydrateContent('content/projects.json', '[data-projects]', projectMarkup);
-hydrateContent('content/people.json', '[data-people-grid]', personMarkup, configurePeopleGrid);

@@ -2,6 +2,8 @@
 
 网站的内容数据已经与页面设计分开。学生更新 **Working Systems** 或 **People** 时，不需要修改 `index.html`、CSS 或 JavaScript。
 
+成员和项目卡片在发布前从 JSON 自动生成到 `index.html` 中，不再让访客等待额外的数据请求。即使脚本加载失败，名单也能显示；图片仍使用浏览器原生的按需加载和响应式压缩图片。
+
 ## 推荐方式：PIS Content Studio
 
 这是一个只在本机运行的内容更新工作台。它会把表单内容写入 JSON，自动裁图、压缩并生成 WebP 文件，但不会直接发布网站，也不会自动合并代码。
@@ -81,7 +83,8 @@ PIS Content Studio 只监听本机地址 `127.0.0.1`，不会部署到公开主�
 
 ```bash
 npm run validate:content
+npm run render:content
 npm run build
 ```
 
-这两个命令会检查必填字段、重复条目、邮件格式、照片焦点和图片是否存在。
+这些命令会检查必填字段、重复条目、邮件格式、照片焦点和图片是否存在，并生成静态卡片。提交时请同时包含自动更新的 `index.html`。内容工作台保存、`npm run dev` 和 `npm run build` 都会自动生成卡片；GitHub 检查会提示是否漏交生成结果。

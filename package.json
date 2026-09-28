@@ -9,9 +9,10 @@
     "images": "node scripts/optimize-images.mjs",
     "content:studio": "node scripts/content-studio.mjs",
     "validate:content": "node scripts/validate-content.mjs",
-    "predev": "npm run images && npm run sync && npm run validate:content",
+    "render:content": "node scripts/render-content.mjs",
+    "predev": "npm run images && npm run validate:content && npm run render:content && npm run sync",
     "dev": "vinext dev --host 127.0.0.1",
-    "prebuild": "npm run images && npm run sync && npm run validate:content",
+    "prebuild": "npm run images && npm run validate:content && npm run render:content && npm run sync",
     "build": "vinext build",
     "start": "vinext start --host 127.0.0.1"
   },
