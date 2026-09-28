@@ -6,12 +6,16 @@ on:
       - 'content/**'
       - 'img/**'
       - 'scripts/validate-content.mjs'
+      - 'scripts/test-content-loading.mjs'
+      - 'js/site.js'
   push:
     branches: [main]
     paths:
       - 'content/**'
       - 'img/**'
       - 'scripts/validate-content.mjs'
+      - 'scripts/test-content-loading.mjs'
+      - 'js/site.js'
 
 permissions:
   contents: read
@@ -25,3 +29,4 @@ jobs:
         with:
           node-version: 22
       - run: node scripts/validate-content.mjs
+      - run: node --test scripts/test-content-loading.mjs

@@ -172,7 +172,11 @@ async function hydrateContent(url, selector, renderer, afterRender) {
   const container = document.querySelector(selector);
   if (!container) return;
   try {
-    const response = await fetch(url);
+    // Refresh small content manifests independently of cached scripts and images.
+    // A fresh URL also avoids an older JSON response at the Pages CDN edge.
+    const requestURL = new URL(url, document.baseURI);
+    requestURL.searchParams.set('v', String(Date.now()));
+    const response = await fetch(requestURL, { cache: 'no-store' });
     if (!response.ok) throw new Error(`Content request failed: ${response.status}`);
     const items = await response.json();
     container.innerHTML = items.map(renderer).join('');
