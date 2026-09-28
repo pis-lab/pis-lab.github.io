@@ -227,6 +227,9 @@ main img { -webkit-user-drag: none; user-select: none; }
 @media (min-width: 1051px) {
   .people-grid[data-columns="4"][data-remainder="1"] .person:last-child { grid-column: 2 / span 2; justify-self: center; width: calc(50% - .5px); }
   .people-grid[data-columns="4"][data-remainder="2"] .person:nth-last-child(2) { grid-column: 2; }
+  /* A centered partial row has no preceding card to provide its left edge. */
+  .people-grid[data-columns="4"][data-remainder="1"] .person:last-child,
+  .people-grid[data-columns="4"][data-remainder="2"] .person:nth-last-child(2) { border-left: 2px solid var(--grid-rule); }
 }
 .person:hover > .person-photo { filter: saturate(1) brightness(1) contrast(1); transform: scale(1.035); }
 .person-info { min-height: 12rem; padding: 1rem; position: relative; }
