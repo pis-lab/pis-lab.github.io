@@ -79,6 +79,14 @@
   },
   {
     "role": "Research assistant",
+    "name": "Sean S.H. Zhang",
+    "focus": "Embodied AI in Education",
+    "image": "img/member/sean-sh-zhang.jpg",
+    "alt": "Sean S.H. Zhang",
+    "position": "center 35%"
+  },
+  {
+    "role": "Research assistant",
     "name": "Gil J.H. Xu",
     "focus": "Trust and Calibration in IV",
     "image": "img/member/gil-jh-xu.jpg",
