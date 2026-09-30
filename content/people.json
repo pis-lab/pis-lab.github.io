@@ -83,5 +83,13 @@
     "focus": "Trust and Calibration in IV",
     "image": "img/member/gil-jh-xu.jpg",
     "alt": "Gil J.H. Xu"
+  },
+  {
+    "role": "Research assistant",
+    "name": "Zayn L.X. Feng",
+    "focus": "Human–Computer Interaction",
+    "image": "img/member/zayn-lx-feng.jpg",
+    "alt": "Zayn L.X. Feng",
+    "position": "center 35%"
   }
 ]
