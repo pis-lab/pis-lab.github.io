@@ -76,5 +76,12 @@
     "image": "img/member/jerry-zl-cao.png",
     "alt": "Jerry Z.L. Cao",
     "position": "top"
+  },
+  {
+    "role": "Research assistant",
+    "name": "Gil J.H. Xu",
+    "focus": "Trust and Calibration in IV",
+    "image": "img/member/gil-jh-xu.jpg",
+    "alt": "Gil J.H. Xu"
   }
 ]
