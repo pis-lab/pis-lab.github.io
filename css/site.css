@@ -132,6 +132,8 @@ main img { -webkit-user-drag: none; user-select: none; }
 .project-copy ul { border-top: 1px solid rgba(255,255,255,.4); display: flex; flex-wrap: wrap; font-size: .72rem; font-weight: 750; gap: .55rem; letter-spacing: .055em; list-style: none; margin: 2rem 0 0; padding: 1rem 0 0; text-transform: uppercase; }
 .project-copy li + li::before { color: var(--red); content: "/"; margin-right: .55rem; }
 .project-copy strong { font-size: clamp(1.05rem, 1.5vw, 1.4rem); letter-spacing: -.03em; margin-top: 1.25rem; text-transform: uppercase; }
+.project-copy > p.project-publication { margin-top: 1rem; font-size: .9rem; }
+.project-publication a { text-decoration: underline; text-underline-offset: .2em; }
 
 .method { background: var(--white); }
 .method-case { border: 2px solid var(--grid-rule); display: grid; grid-template-columns: minmax(16rem, 1fr) minmax(0, 3fr); margin-bottom: 1rem; }

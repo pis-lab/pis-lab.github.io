@@ -43,6 +43,9 @@ export function personMarkup(person) {
 
 export function projectMarkup(project, index) {
   const tags = project.tags.map(tag => `<li>${escapeHTML(tag)}</li>`).join('');
+  const publication = project.publication?.href?.startsWith('https://')
+    ? `<p class="project-publication"><a href="${escapeHTML(project.publication.href)}" target="_blank" rel="noreferrer">${escapeHTML(project.publication.title)}</a><br>${escapeHTML(project.publication.venue)}</p>`
+    : '';
   return `<article class="project-feature">
     <div class="project-image">${responsiveImage(project.image, project.alt, '', [640, 960, 1440], '(max-width: 760px) 100vw, 50vw')}</div>
     <div class="project-copy">
@@ -51,7 +54,7 @@ export function projectMarkup(project, index) {
       <h3>${escapeHTML(project.headline)}</h3>
       <p>${escapeHTML(project.description)}</p>
       <ul>${tags}</ul>
-      <strong>${escapeHTML(project.name)}</strong>
+      <strong>${escapeHTML(project.name)}</strong>${publication ? `\n      ${publication}` : ''}
     </div>
   </article>`;
 }

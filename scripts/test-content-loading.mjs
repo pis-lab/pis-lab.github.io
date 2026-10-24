@@ -59,3 +59,12 @@ test('profile links, focus crops and safe escaping are preserved', () => {
   assert.doesNotMatch(unsafe, /<script>|javascript:/);
   assert.match(unsafe, /&lt;script&gt;/);
 });
+
+test('Tangible Informatics has a visible paper link and rejects unsafe publication URLs', () => {
+  const project = projects.find(project => project.name === 'Tangible Informatics');
+  assert.equal(project.publication.href, 'https://doi.org/10.1016/j.jii.2026.101216');
+  const markup = projectMarkup(project, 3);
+  assert.ok(markup.includes(escapeHTML(project.publication.title)));
+  assert.ok(html.includes(markup));
+  assert.doesNotMatch(projectMarkup({ ...project, publication: { ...project.publication, href: 'javascript:alert(1)' } }, 3), /javascript:|project-publication/);
+});

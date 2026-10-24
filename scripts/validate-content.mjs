@@ -42,6 +42,10 @@ for (const [index, project] of projects.entries()) {
     throw new Error(`${label}: tags must be a non-empty array of text labels.`);
   }
   await requireLocalImage(project.image, label);
+  if (project.publication) {
+    requireFields(project.publication, ['title', 'href', 'venue'], `${label} publication`);
+    if (!project.publication.href.startsWith('https://')) throw new Error(`${label}: publication href must start with https://.`);
+  }
 }
 
 const newsTitles = new Set();

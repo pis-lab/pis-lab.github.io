@@ -37,7 +37,12 @@
     "image": "img/projects/tangible-informatics.webp",
     "alt": "Hands arranging transparent interface cards and physical tokens to prototype an understandable intelligent process",
     "stage": "Design methodology",
-    "tags": ["Tangible informatics", "Interaction prototyping", "Human understanding"]
+    "tags": ["Tangible informatics", "Interaction prototyping", "Human understanding"],
+    "publication": {
+      "title": "Tangible informatics: Bridging the cognitive disconnect in the intelligentization of industrial systems",
+      "href": "https://doi.org/10.1016/j.jii.2026.101216",
+      "venue": "Journal of Industrial Information Integration, 54, 101216, 2026."
+    }
   },
   {
     "name": "Embodied AI",
