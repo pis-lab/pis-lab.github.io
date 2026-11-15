@@ -74,6 +74,10 @@ PIS Content Studio 只监听本机地址 `127.0.0.1`，不会部署到公开主�
 
 ## 备用方式：直接编辑 JSON
 
+### 近期出版物
+
+`content/publications.json`维护Working Systems下方的近期论文，按数组顺序显示。每条包含`title`、`authors`、`venue`、`year`和可选的`href`。已接收论文在`venue`中注明`Accepted`；尚未确认DOI时将`href`设为`null`，不填占位链接。运行`npm run render:content`后，将此文件与生成的`index.html`一起提交。论文直接生成在HTML中，不增加访客加载时的数据请求。
+
 如果工作台暂时不能运行，也可以上传图片后直接编辑：
 
 - 研究项目：`content/projects.json` 与 `img/projects/`

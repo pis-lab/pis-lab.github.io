@@ -113,6 +113,15 @@ main img { -webkit-user-drag: none; user-select: none; }
 .projects-heading h2 { font-family: var(--display); font-size: clamp(4rem, 8vw, 9.2rem); font-weight: 800; letter-spacing: -.065em; line-height: .82; margin: 0; text-transform: uppercase; }
 .projects-heading h2 i { color: var(--red); font-family: Georgia, "Times New Roman", serif; font-weight: 400; text-transform: none; }
 .projects-list { border-top: 2px solid var(--grid-rule-dark); }
+.recent-publications { margin-top: clamp(3rem, 6vw, 6rem); }
+.recent-publications > h3 { font-size: clamp(1.4rem, 2vw, 2rem); font-weight: 750; margin: 0 0 1.5rem; }
+.recent-publications-list { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--grid-rule-dark); }
+.recent-publications-list li { padding: 1.5rem 0; border-bottom: 1px solid var(--grid-rule-dark); }
+.recent-publications-list h4 { max-width: 65rem; margin: 0 0 .7rem; font-size: clamp(1.05rem, 1.6vw, 1.4rem); line-height: 1.45; font-weight: 650; overflow-wrap: break-word; }
+.recent-publications-list p { margin: .25rem 0; color: #c3c2bc; font-size: .92rem; line-height: 1.65; }
+.recent-publications-list a:hover, .recent-publications-more a:hover { text-decoration: underline; text-underline-offset: .2em; }
+.recent-publications-more { margin: 1.5rem 0 0; font-size: .94rem; }
+.recent-publications-more a { color: var(--red); font-weight: 700; }
 .content-loading-light { border-color: rgba(255,255,255,.45) !important; color: rgba(255,255,255,.7); }
 .project-feature { border-bottom: 2px solid var(--grid-rule-dark); display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(22rem, .8fr); min-height: 39rem; }
 .project-feature:nth-child(even) { grid-template-columns: minmax(22rem, .8fr) minmax(0, 1.2fr); }

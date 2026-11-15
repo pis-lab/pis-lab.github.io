@@ -72,6 +72,19 @@ export function renderPage(html, people, projects) {
   return html;
 }
 
+export function recentPublicationsMarkup(publications) {
+  if (!Array.isArray(publications)) throw new Error('Publication records must be an array.');
+  return '<ol class="recent-publications-list">\n' + publications.map(publication => {
+    for (const key of ['title', 'authors', 'venue']) {
+      if (typeof publication[key] !== 'string' || !publication[key].trim()) throw new Error(`Missing publication ${key}.`);
+    }
+    if (publication.href && !publication.href.startsWith('https://')) throw new Error('Publication links must use HTTPS.');
+    const title = escapeHTML(publication.title);
+    const heading = publication.href ? `<a href="${escapeHTML(publication.href)}" target="_blank" rel="noreferrer">${title}</a>` : title;
+    return `  <li><h4>${heading}</h4><p>${escapeHTML(publication.authors)}</p><p>${escapeHTML(publication.venue)}</p></li>`;
+  }).join('\n') + '\n</ol>';
+}
+
 export async function renderContent({ check = false } = {}) {
   const target = path.join(root, 'index.html');
   const [html, people, projects] = await Promise.all([
@@ -79,7 +92,11 @@ export async function renderContent({ check = false } = {}) {
     readFile(path.join(root, 'content/people.json'), 'utf8').then(JSON.parse),
     readFile(path.join(root, 'content/projects.json'), 'utf8').then(JSON.parse)
   ]);
-  const rendered = renderPage(html, people, projects);
+  const publications = JSON.parse(await readFile(path.join(root, 'content/publications.json'), 'utf8'));
+  const publicationPattern = /(<!-- generated:publications:start -->)[\s\S]*?(<!-- generated:publications:end -->)/;
+  if (!publicationPattern.test(html)) throw new Error('Missing generated publications markers in index.html');
+  const rendered = renderPage(html, people, projects).replace(publicationPattern,
+    (_, start, end) => `${start}\n        ${recentPublicationsMarkup(publications)}\n        ${end}`);
   if (check) {
     if (html.replaceAll('\r\n', '\n') !== rendered.replaceAll('\r\n', '\n')) {
       throw new Error('Static content is out of date. Run npm run render:content and commit index.html.');
